@@ -1,0 +1,17 @@
+.square {
+  position: relative;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.square:after {
+  content: "";
+  display: block;
+  padding-bottom: 100%;
+}
+
+.content {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}

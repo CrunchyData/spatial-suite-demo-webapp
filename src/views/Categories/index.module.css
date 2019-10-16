@@ -1,0 +1,10 @@
+.mapContainer {
+  position: relative;
+  width: 100%;
+}
+/* Make the map a square */
+.mapContainer:after {
+  content: "";
+  display: block;
+  padding-bottom: 100%;
+}
