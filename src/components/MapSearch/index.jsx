@@ -5,11 +5,11 @@ import ParcelMap from './components/ParcelMap';
 import SearchForm from './components/SearchForm';
 import SearchResultsList from './components/SearchResultsList';
 
-/** @typedef {import('./useLocalStateController').Parcel} */
+/** @typedef {import('api').Parcel} Parcel */
 
 /**
  * @typedef {Object} Props
- * @property {function(Parcel): void} props.onSelectParcel - Callback to handle when the user
+ * @property {function(Parcel): void} onSelectParcel - Callback to handle when the user
  *     selects a parcel from the map or search results
  */
 
