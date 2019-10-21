@@ -1,5 +1,5 @@
 import React from 'react';
-import { Spinner } from '@patternfly/react-core/dist/esm/experimental';
+import { Spinner } from '@patternfly/react-core/dist/js/experimental';
 import api from 'api';
 import ParcelMap from './components/ParcelMap';
 import SearchForm from './components/SearchForm';
