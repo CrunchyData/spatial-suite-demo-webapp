@@ -14,7 +14,7 @@ When ready to deploy, run [`npm run build`](#npm-run-build) to compile/bundle th
 
 ### Folder Structure
 
-- `public/` - Contains a few static assets, including the `index.html` template. We may never need to touch this directory again, except maybe to add a `favicon.ico`. [More info](https://create-react-app.dev/docs/folder-structure)
+- `public/` - Contains a few static assets, including the `index.html` template. We may never need to touch this directory again, except maybe to add a `favicon.ico`. [More info](https://create-react-app.dev/docs/using-the-public-folder)
 - `src/` - Contains our app code
   - `api/` - Modules to handle API requests
   - `components/` - Components to be reused across multiple views
