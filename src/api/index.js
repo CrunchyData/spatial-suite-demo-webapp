@@ -8,7 +8,7 @@ const api = {
      * @param {string} queryText
      * @returns {Promise<Array<Parcel>>}
      */
-    async search() {
+    async search(queryText) { // eslint-disable-line no-unused-vars
       // Simulate an API request delay
       await new Promise(resolve => {
         setTimeout(resolve, 500);
