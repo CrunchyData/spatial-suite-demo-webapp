@@ -1,15 +1,24 @@
 import React, { useState } from 'react';
 import {
+  Bullseye,
   Grid,
   GridItem,
   PageSection,
-  Bullseye,
+  PageSectionVariants,
+  TextContent,
+  Text,
 } from '@patternfly/react-core';
 import ViewHeading from 'components/ViewHeading';
 import MapSearch from 'components/MapSearch';
 import EditForm from './components/EditForm';
 
 const selectedParcelInitialState = '';
+
+const ChooseParcelText = () => (
+  <TextContent>
+    <Text>Please choose a parcel.</Text>
+  </TextContent>
+);
 
 const Categories = () => {
   const [selectedParcel, setSelectedParcel] = useState(selectedParcelInitialState);
@@ -20,11 +29,9 @@ const Categories = () => {
 
   return (
     <>
-      <PageSection>
+      <PageSection variant={PageSectionVariants.light}>
         <ViewHeading>fire risk category editor and viewer</ViewHeading>
-      </PageSection>
 
-      <PageSection>
         <Grid gutter="md">
           <GridItem span={4}>
             <MapSearch onSelectParcel={setSelectedParcel} />
@@ -35,10 +42,9 @@ const Categories = () => {
               {
                 selectedParcel
                   ? <EditForm onCancelButtonClick={handleCancelButtonClick} />
-                  : 'Please choose a parcel'
+                  : <ChooseParcelText />
               }
             </Bullseye>
-
           </GridItem>
         </Grid>
       </PageSection>
