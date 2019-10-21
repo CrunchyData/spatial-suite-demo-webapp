@@ -12,6 +12,14 @@ When ready to deploy, run [`npm run build`](#npm-run-build) to compile/bundle th
 
 ## Project Info
 
+### Folder Structure
+
+- `public/` - Contains a few static assets, including the `index.html` template. We may never need to touch this directory again, except maybe to add a `favicon.ico`. [More info](https://create-react-app.dev/docs/folder-structure)
+- `src/` - Contains our app code
+  - `api/` - Modules to handle API requests
+  - `components/` - Components to be reused across multiple views
+  - `views/` - Our "views". These are the "page" components that render when the user selects a different page in the header nav.
+
 ### State Management
 
 There are no third-party state management libraries in use at this time. This project is small enough to use React's built-in state management.
