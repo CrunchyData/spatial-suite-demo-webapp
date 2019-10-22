@@ -28,7 +28,7 @@ class MapSearch extends React.Component {
    * Performs a parcel search with the backend
    * @param {string} queryText
    */
-  doParcelSearch = queryText => {
+  doParcelSearch = async queryText => {
     // Update state to indicate that there is a search in progress
     this.setState({
       isSearchInProgress: true,
@@ -36,23 +36,22 @@ class MapSearch extends React.Component {
       errorMessage: '',
     });
 
-    // Perform the API request
-    api.parcels.search(queryText)
-      .then(searchResults => {
-        // Request was successful. Store results in state.
-        this.setState({
-          isSearchInProgress: false,
-          searchResults,
-        });
-      })
-      .catch(() => {
-        // Request was unsuccessful.
-        this.setState({
-          isSearchInProgress: false,
-          errorMessage: 'An error occurred',
-        });
+    try {
+      const searchResults = await api.parcels.search(queryText);
+
+      // Store results in state
+      this.setState({
+        isSearchInProgress: false,
+        searchResults,
       });
-  }
+    } catch {
+      // Request was unsuccessful
+      this.setState({
+        isSearchInProgress: false,
+        errorMessage: 'An error occurred',
+      });
+    }
+  };
 
   render() {
     // Alias some things
