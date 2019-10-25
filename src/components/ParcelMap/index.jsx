@@ -3,7 +3,7 @@ import CrunchyMap from './CrunchyMap';
 import styles from './index.module.scss';
 
 /** OpenLayers map component */
-const OLMap = () => {
+const ParcelMap = () => {
   const refMapContainer = useRef(null);
   const refPopupCloser = useRef(null);
   const refPopupContainer = useRef(null);
@@ -52,4 +52,4 @@ const OLMap = () => {
   );
 };
 
-export default OLMap;
+export default ParcelMap;
