@@ -81,7 +81,8 @@ export default function CrunchyMap(elements) {
     source: new VectorTileSource({
       format: new MVT(),
       url: `${URL.data}/maps/parcels/{z}/{x}/{y}.pbf`,
-      maxZoom: 14,
+      minZoom: 16,
+      maxZoom: 16,
     }),
   });
 
