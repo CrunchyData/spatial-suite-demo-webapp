@@ -5,9 +5,9 @@
   "dependencies": {
     "@patternfly/react-core": "^3.112.3",
     "@patternfly/react-icons": "^3.14.12",
-    "axios": "^0.19.0",
     "node-sass": "^4.12.0",
     "ol": "^6.0.1",
+    "ol-mapbox-style": "^5.0.2",
     "prop-types": "^15.7.2",
     "react": "^16.10.2",
     "react-dom": "^16.10.2",
