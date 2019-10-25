@@ -1,45 +1,54 @@
 import React, { useLayoutEffect, useRef } from 'react';
-import Map from 'ol/Map';
-import OSM from 'ol/source/OSM';
-import TileLayer from 'ol/layer/Tile';
-import View from 'ol/View';
-import { fromLonLat } from 'ol/proj';
-import styles from './index.module.css';
+import CrunchyMap from './CrunchyMap';
+import styles from './index.module.scss';
 
 /** OpenLayers map component */
 const OLMap = () => {
-  /** @type {React.MutableRefObject<HTMLDivElement | null>} */
-  const divRef = useRef(null);
+  const refMapContainer = useRef(null);
+  const refPopupCloser = useRef(null);
+  const refPopupContainer = useRef(null);
+  const refPopupContent = useRef(null);
 
   // In case we need to access the Map instance at some point
-  /** @type {React.MutableRefObject<import('ol/Map').default | null>} */
-  const mapRef = useRef(null);
+  /** @typedef {import('ol/Map').default} MapInstance */
+  /** @type {React.MutableRefObject<MapInstance | null>} MapInstanceRef */
+  const refMapInstance = useRef(null);
 
   useLayoutEffect(
     () => {
-      // Instantiate an OpenLayers map.
-      // This is based on their quick start example, but adapted to work in our project.
-      // https://openlayers.org/en/latest/doc/quickstart.html
-      mapRef.current = new Map({
-        target: divRef.current,
+      // Make sure all refs have been assigned elements before attempting instantiate the map
+      const areAllRefsAssigned = [
+        refMapContainer,
+        refPopupCloser,
+        refPopupContainer,
+        refPopupContent,
+      ].every(ref => ref.current);
 
-        layers: [
-          new TileLayer({
-            source: new OSM(),
-          }),
-        ],
-
-        view: new View({
-          center: fromLonLat([-122.0406932, 36.9759548]),
-          zoom: 13,
-        }),
-      });
+      if (areAllRefsAssigned) {
+        refMapInstance.current = CrunchyMap({
+          mapContainer: refMapContainer.current,
+          popupCloser: refPopupCloser.current,
+          popupContainer: refPopupContainer.current,
+          popupContent: refPopupContent.current,
+        });
+      }
     },
     [],
   );
 
   return (
-    <div ref={divRef} className={styles.container} />
+    <>
+      <div ref={refMapContainer} className={styles.container} />
+      <div ref={refPopupContainer} className={styles.popupContainer}>
+        <button
+          type="button"
+          className={styles.popupCloser}
+          ref={refPopupCloser}
+          aria-label="close popup"
+        />
+        <div ref={refPopupContent} />
+      </div>
+    </>
   );
 };
 
