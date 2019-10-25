@@ -19,7 +19,7 @@ const SearchResultsList = ({ onSelectParcel, parcelSearchResults }) => (
       return (
         <ListItem key={idx}>
           <Button variant="link" onClick={handleClick}>
-            {parcel}
+            {parcel.address}
           </Button>
         </ListItem>
       );
