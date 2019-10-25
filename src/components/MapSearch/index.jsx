@@ -1,13 +1,15 @@
 import React from 'react';
 import { Spinner } from '@patternfly/react-core/dist/js/experimental';
 import api from 'api';
-import ParcelMap from './components/ParcelMap';
+import ParcelMap from 'components/ParcelMap';
 import SearchForm from './components/SearchForm';
 import SearchResultsList from './components/SearchResultsList';
+import styles from './index.module.css';
 
 /** @typedef {import('api').Parcel} Parcel */
 
 /**
+ * MapSearch component props
  * @typedef {Object} Props
  * @property {function(Parcel): void} onSelectParcel - Callback to handle when the user
  *     selects a parcel from the map or search results
@@ -75,7 +77,11 @@ class MapSearch extends React.Component {
 
     return (
       <div>
-        <ParcelMap />
+        <div className={styles.square}>
+          <div className={styles.content}>
+            <ParcelMap />
+          </div>
+        </div>
         <SearchForm onSubmit={doParcelSearch} />
         {errorMessage || <SearchResults />}
       </div>
