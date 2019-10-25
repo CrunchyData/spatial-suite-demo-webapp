@@ -1,5 +1,10 @@
-// A parcel will just be a string for now, until we implement that part
-/** @typedef {string} Parcel */
+/**
+ * @typedef {Object} Parcel
+ * @property {string} id
+ * @property {string} apn
+ * @property {string} address
+ * @property {boolean} isFireHazard
+ */
 
 const api = {
   parcels: {
@@ -14,11 +19,20 @@ const api = {
         setTimeout(resolve, 500);
       });
 
-      return [
-        'parcel1',
-        'parcel2',
-        'parcel3',
-      ];
+      const response = Array(4).fill(null)
+        .map((_, idx) => {
+          // ID will never be 0
+          const id = idx + 1;
+
+          return {
+            id,
+            apn: (1000 + id).toString(10),
+            address: `10${id} Example St.`,
+            isFireHazard: Math.random() >= 0.5,
+          };
+        });
+
+      return response;
     },
   },
 };
