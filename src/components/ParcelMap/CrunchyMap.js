@@ -10,8 +10,13 @@ import {
   Fill, Stroke, Style, Text,
 } from 'ol/style';
 
+/** @typedef {import('ol').MapBrowserEvent} MapBrowserEvent */
+/** @typedef {import('api').Parcel} Parcel */
+/** @typedef {import('./index').ParcelClickHandler} ParcelClickHandler */
+
 const ATTR_APN = 'apn';
 const ATTR_FIREHAZ = 'firehazard';
+
 const URL_BASE_SC = 'http://sc-tileserver-gl-scfire.openshift-pousty-apps.gce-containers.crunchydata.com';
 const URL_DATA_SC = 'http://tegola-scfire.openshift-pousty-apps.gce-containers.crunchydata.com';
 
@@ -21,19 +26,21 @@ const URL = {
 };
 
 /**
- * @param {Object} elements
- * @param {HTMLElement} elements.mapContainer
- * @param {HTMLElement} elements.popupCloser
- * @param {HTMLElement} elements.popupContainer
- * @param {HTMLElement} elements.popupContent
+ * @param {Object} props
+ * @param {HTMLDivElement} props.mapContainer
+ * @param {HTMLButtonElement} props.popupCloser
+ * @param {HTMLDivElement} props.popupContainer
+ * @param {HTMLDivElement} props.popupContent
+ * @param {ParcelClickHandler} [props.onParcelClick]
  */
-export default function CrunchyMap(elements) {
+export default function CrunchyMap(props) {
   const {
     mapContainer,
     popupCloser,
     popupContainer,
     popupContent,
-  } = elements;
+    onParcelClick = noop,
+  } = props;
 
   /** lookup for highlighted objects */
   let highlighted = null;
@@ -52,7 +59,7 @@ export default function CrunchyMap(elements) {
     overlays: [overlay],
     view: new View({
       center: fromLonLat([-122.0225, 37.0]),
-      zoom: 15,
+      zoom: 16,
     }),
   });
 
@@ -61,7 +68,7 @@ export default function CrunchyMap(elements) {
     source: new VectorTileSource({
       format: new MVT(),
       url: `${URL.base}/data/v3/{z}/{x}/{y}.pbf`,
-      maxZoom: 14,
+      maxZoom: 16,
     }),
   });
 
@@ -124,7 +131,24 @@ export default function CrunchyMap(elements) {
     const features = map.getFeaturesAtPixel(evt.pixel);
     const feature = features ? features[0] : null;
 
-    showParcelPopup(evt, feature);
+    if (feature.get('layer') !== 'parcels') {
+      overlay.setPosition(undefined);
+      return;
+    }
+
+    const parcelId = feature.getId().toString();
+    const isFireHazard = feature.get(ATTR_FIREHAZ) === 'Yes';
+
+    /** @type {Parcel} */
+    const parcel = {
+      id: parcelId,
+      address: `${parcelId} Example St.`,
+      apn: feature.get(ATTR_APN),
+      isFireHazard,
+    };
+
+    showParcelPopup(evt, parcel);
+    onParcelClick(parcel);
   });
 
   function highlightFeature(feature) {
@@ -150,17 +174,14 @@ export default function CrunchyMap(elements) {
     return false;
   };
 
-  function showParcelPopup(evt, feature) {
-    if (feature.get('layer') !== 'parcels') {
-      overlay.setPosition(undefined);
-      return;
-    }
+  /**
+   * @param {MapBrowserEvent} evt
+   * @param {Parcel} parcel
+   */
+  function showParcelPopup(evt, parcel) {
     const { coordinate } = evt;
-    const id = feature.id_;
-    popupContent.innerHTML = `${'<p>'
-      + '<b>Parcel '}${id}</b>`
-      + '</p>'
-      + `<p>APN: ${feature.get(ATTR_APN)}</p>`;
+    const { id, apn } = parcel;
+    popupContent.innerHTML = `<p><b>Parcel ${id}</b></p> <p>APN: ${apn}</p>`;
     overlay.setPosition(coordinate);
   }
 
@@ -216,3 +237,5 @@ function createStyleFire(feature) {
     }),
   });
 }
+
+function noop() { }
