@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   ActionGroup,
   Button,
@@ -8,32 +8,52 @@ import {
   FormSelectOption,
 } from '@patternfly/react-core';
 
+/** @typedef {import('api').Parcel} Parcel */
+
 /**
  * Form for editing a parcel's risk
  * @param {Object} props
+ * @param {Parcel} props.parcel - The parcel to be edited
  * @param {function(): void} props.onCancelButtonClick - Callback that gets called when the user
  *     clicks the cancel button
- * @param {function(string): void} props.onSaveButtonClick - Callback that receives the risk value
- *     from the form
+ * @param {function(Parcel): void} props.onSaveButtonClick - Callback that receives the edited
+ *     parcel when the user clicks the "save" button
  */
-const EditForm = ({ onCancelButtonClick, onSaveButtonClick }) => {
-  const [riskValue, setRiskValue] = useState('no');
+const EditForm = props => {
+  const { onCancelButtonClick, onSaveButtonClick } = props;
 
-  const handleFormSubmit = event => {
-    event.preventDefault();
-    onSaveButtonClick(riskValue);
+  const [parcel, setParcel] = useStateFromPropParcel(props.parcel);
+
+  /**
+   * <select> onChange handler
+   * @param {'yes' | 'no'} isFireHazardStr - The <select> will pass this value as a string
+   */
+  const handleFireHazardChange = isFireHazardStr => {
+    const isFireHazard = isFireHazardStr === 'yes';
+
+    setParcel(prevParcel => ({
+      ...prevParcel,
+      isFireHazard,
+    }));
   };
 
+  /** <form> onSubmit handler */
+  const handleFormSubmit = event => {
+    event.preventDefault(); // Prevent the browser from refreshing
+    onSaveButtonClick(parcel);
+  };
+
+  /** "save" button's onClick handler */
   const handleSaveButtonClick = () => {
-    onSaveButtonClick(riskValue);
+    onSaveButtonClick(parcel);
   };
 
   return (
     <Form onSubmit={handleFormSubmit}>
       <FormSelect
-        value={riskValue}
-        onChange={setRiskValue}
-        aria-label="Is this parcel a risk?"
+        value={parcel.isFireHazard ? 'yes' : 'no'}
+        onChange={handleFireHazardChange}
+        aria-label="Is this parcel a fire hazard?"
       >
         <FormSelectOption value="yes" label="Yes" />
         <FormSelectOption value="no" label="No" />
@@ -55,5 +75,22 @@ const EditForm = ({ onCancelButtonClick, onSaveButtonClick }) => {
     </Form>
   );
 };
+
+/**
+ * Updates local state parcel when a different parcel is passed in from props
+ * @param {Parcel} propParcel - Parcel from props
+ */
+function useStateFromPropParcel(propParcel) {
+  // Set initial state from parcel
+  const [stateParcel, setStateParcel] = useState(propParcel);
+
+  // If a different parcel is passed in from props, keep state in sync
+  useEffect(
+    () => { setStateParcel(propParcel); },
+    [propParcel],
+  );
+
+  return [stateParcel, setStateParcel];
+}
 
 export default EditForm;
