@@ -60,7 +60,7 @@ const ParcelMap = ({ onParcelClick }) => {
   return (
     <>
       <div ref={refMapContainer} className={styles.container} />
-      <div ref={refPopupContainer} className={styles.popupContainer}>
+      <div ref={refPopupContainer} className={styles.popup}>
         <button
           type="button"
           className={styles.popupCloser}

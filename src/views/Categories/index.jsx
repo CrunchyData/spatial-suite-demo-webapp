@@ -12,7 +12,10 @@ import ViewHeading from 'components/ViewHeading';
 import MapSearch from 'components/MapSearch';
 import EditForm from './components/EditForm';
 
-const selectedParcelInitialState = '';
+/** @typedef {import('api').Parcel} Parcel */
+
+/** @type {Parcel | null} */
+const selectedParcelInitialState = null;
 
 const ChooseParcelText = () => (
   <TextContent>
@@ -24,31 +27,41 @@ const Categories = () => {
   const [selectedParcel, setSelectedParcel] = useState(selectedParcelInitialState);
 
   const handleCancelButtonClick = () => {
+    // Deselect the parcel
     setSelectedParcel(selectedParcelInitialState);
   };
 
+  const handleSaveButtonClick = parcel => {
+    // TODO: Send parcel updates to backend
+    setSelectedParcel(parcel);
+  };
+
   return (
-    <>
-      <PageSection variant={PageSectionVariants.light}>
-        <ViewHeading>fire risk category editor and viewer</ViewHeading>
+    <PageSection variant={PageSectionVariants.light}>
+      <ViewHeading>fire risk category editor and viewer</ViewHeading>
 
-        <Grid gutter="md">
-          <GridItem span={4}>
-            <MapSearch onSelectParcel={setSelectedParcel} />
-          </GridItem>
+      <Grid gutter="md">
+        <GridItem span={4}>
+          <MapSearch onSelectParcel={setSelectedParcel} />
+        </GridItem>
 
-          <GridItem span={8}>
-            <Bullseye>
-              {
-                selectedParcel
-                  ? <EditForm onCancelButtonClick={handleCancelButtonClick} />
-                  : <ChooseParcelText />
-              }
-            </Bullseye>
-          </GridItem>
-        </Grid>
-      </PageSection>
-    </>
+        <GridItem span={8}>
+          <Bullseye>
+            {
+              selectedParcel
+                ? (
+                  <EditForm
+                    onCancelButtonClick={handleCancelButtonClick}
+                    onSaveButtonClick={handleSaveButtonClick}
+                    parcel={selectedParcel}
+                  />
+                )
+                : <ChooseParcelText />
+            }
+          </Bullseye>
+        </GridItem>
+      </Grid>
+    </PageSection>
   );
 };
 
