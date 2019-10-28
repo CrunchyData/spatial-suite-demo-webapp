@@ -70,7 +70,7 @@ export default function CrunchyMap(props) {
     source: new VectorTileSource({
       format: new MVT(),
       url: `${URL.base}/data/v3/{z}/{x}/{y}.pbf`,
-      maxZoom: 16,
+      maxZoom: 14,
     }),
   });
 
@@ -113,24 +113,6 @@ export default function CrunchyMap(props) {
     if (!highlighted) return false;
     return feature.id_ === highlighted.id_;
   }
-
-  // ==================================================
-  // Highlighted feature
-  // see https://openlayers.org/en/latest/examples/vector-tile-selection.html?q=select
-  //     https://openlayers.org/en/latest/examples/select-features.html
-  // ==================================================
-
-  /*
-  map.on('pointermove', evt => {
-    if (evt.dragging) {
-      return;
-    }
-    const features = map.getFeaturesAtPixel(evt.pixel);
-    const feature = features ? features[0] : null;
-
-    highlightFeature(feature);
-  });
-*/
 
   map.on('singleclick', evt => {
     const features = map.getFeaturesAtPixel(evt.pixel);
