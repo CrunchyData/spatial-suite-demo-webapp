@@ -70,7 +70,7 @@ export default function CrunchyMap(props) {
     source: new VectorTileSource({
       format: new MVT(),
       url: `${URL.base}/data/v3/{z}/{x}/{y}.pbf`,
-      maxZoom: 16,
+      maxZoom: 14,
     }),
   });
 
@@ -114,29 +114,13 @@ export default function CrunchyMap(props) {
     return feature.id_ === highlighted.id_;
   }
 
-  // ==================================================
-  // Highlighted feature
-  // see https://openlayers.org/en/latest/examples/vector-tile-selection.html?q=select
-  //     https://openlayers.org/en/latest/examples/select-features.html
-  // ==================================================
-
-  /*
-  map.on('pointermove', evt => {
-    if (evt.dragging) {
-      return;
-    }
-    const features = map.getFeaturesAtPixel(evt.pixel);
-    const feature = features ? features[0] : null;
-
-    highlightFeature(feature);
-  });
-*/
-
   map.on('singleclick', evt => {
     const features = map.getFeaturesAtPixel(evt.pixel);
     const feature = features ? features[0] : null;
 
-    if (feature.get('layer') !== 'parcels') {
+    highlightFeature(feature);
+
+    if (! feature || feature.get('layer') !== 'parcels') {
       overlay.setPosition(undefined);
       return;
     }
@@ -151,8 +135,6 @@ export default function CrunchyMap(props) {
       apn: feature.get(ATTR_APN),
       isFireHazard,
     };
-
-    highlightFeature(feature);
 
     showParcelPopup(evt, parcel);
     onParcelClick(parcel);
@@ -216,13 +198,14 @@ function createStyleSelected(feature) {
 
 function createStyleParcel(feature) {
   return new Style({
-    fill: new Fill({ color: '#80ff8010' }),
+    // must specify fill for hit-detection
+    fill: new Fill({ color: '#80ff8001' }),
     stroke: new Stroke({
       color: '#007000',
     }),
     text: new Text({
       text: `${feature.id_}`,
-      fill: new Fill({ color: '#000000' }),
+      fill: new Fill({ color: '#007000' }),
     }),
   });
 }
@@ -237,7 +220,7 @@ function createStyleFire(feature) {
       width: 2,
     }),
     text: new Text({
-      text: feature.get(ATTR_FIREHAZ),
+      text: `${feature.id_}`,
       fill: new Fill({
         color: '#000000',
       }),
