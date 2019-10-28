@@ -14,6 +14,8 @@ import {
 /** @typedef {import('api').Parcel} Parcel */
 /** @typedef {import('./index').ParcelClickHandler} ParcelClickHandler */
 
+const MAP_CENTER = [ -122.0283, 37.0405 ];
+const MAP_ZOOM = 16;
 const ATTR_APN = 'apn';
 const ATTR_FIREHAZ = 'firehazard';
 
@@ -58,8 +60,8 @@ export default function CrunchyMap(props) {
     target: mapContainer,
     overlays: [overlay],
     view: new View({
-      center: fromLonLat([-122.0225, 37.0]),
-      zoom: 16,
+      center: fromLonLat( MAP_CENTER ),
+      zoom: MAP_ZOOM,
     }),
   });
 
@@ -82,9 +84,10 @@ export default function CrunchyMap(props) {
   });
 
   const layerData = new VectorTileLayer({
-    // className: 'dataLayer', // needed to avoid base labels disappearing?
+    className: 'dataLayer', // needed to avoid base labels disappearing?
     style: dataStyle,
     declutter: true,
+    minZoom: 14,
     source: new VectorTileSource({
       format: new MVT(),
       url: `${URL.data}/maps/parcels/{z}/{x}/{y}.pbf`,
@@ -117,6 +120,7 @@ export default function CrunchyMap(props) {
   //     https://openlayers.org/en/latest/examples/select-features.html
   // ==================================================
 
+  /*
   map.on('pointermove', evt => {
     if (evt.dragging) {
       return;
@@ -126,6 +130,7 @@ export default function CrunchyMap(props) {
 
     highlightFeature(feature);
   });
+*/
 
   map.on('singleclick', evt => {
     const features = map.getFeaturesAtPixel(evt.pixel);
@@ -146,6 +151,8 @@ export default function CrunchyMap(props) {
       apn: feature.get(ATTR_APN),
       isFireHazard,
     };
+
+    highlightFeature(feature);
 
     showParcelPopup(evt, parcel);
     onParcelClick(parcel);
