@@ -216,13 +216,13 @@ function createStyleSelected(feature) {
 
 function createStyleParcel(feature) {
   return new Style({
-    fill: new Fill({ color: '#80ff8010' }),
+    //fill: new Fill({ color: '#80ff8010' }),
     stroke: new Stroke({
       color: '#007000',
     }),
     text: new Text({
       text: `${feature.id_}`,
-      fill: new Fill({ color: '#000000' }),
+      fill: new Fill({ color: '#007000' }),
     }),
   });
 }
@@ -237,7 +237,7 @@ function createStyleFire(feature) {
       width: 2,
     }),
     text: new Text({
-      text: feature.get(ATTR_FIREHAZ),
+      text: `${feature.id_}`,
       fill: new Fill({
         color: '#000000',
       }),
