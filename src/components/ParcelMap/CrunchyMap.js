@@ -136,7 +136,9 @@ export default function CrunchyMap(props) {
     const features = map.getFeaturesAtPixel(evt.pixel);
     const feature = features ? features[0] : null;
 
-    if (feature.get('layer') !== 'parcels') {
+    highlightFeature(feature);
+
+    if (! feature || feature.get('layer') !== 'parcels') {
       overlay.setPosition(undefined);
       return;
     }
@@ -151,8 +153,6 @@ export default function CrunchyMap(props) {
       apn: feature.get(ATTR_APN),
       isFireHazard,
     };
-
-    highlightFeature(feature);
 
     showParcelPopup(evt, parcel);
     onParcelClick(parcel);
@@ -216,7 +216,8 @@ function createStyleSelected(feature) {
 
 function createStyleParcel(feature) {
   return new Style({
-    //fill: new Fill({ color: '#80ff8010' }),
+    // must specify fill for hit-detection
+    fill: new Fill({ color: '#80ff8001' }),
     stroke: new Stroke({
       color: '#007000',
     }),
