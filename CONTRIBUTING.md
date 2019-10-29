@@ -1,6 +1,10 @@
 # Contributing
 
-Contributors should fork this repo.  Changes should be made in feature branches in their own repo.  A feature is then submitted to this repo via creating a GitHub Pull Request (PR).  The Pull Request can then be merged by the contributor or another developer with commit access.
+* Contributors should fork this repo
+* Changes should be made in feature branches in their own repo
+* A feature is submitted to this repo via creating a GitHub Pull Request (PR)
+* The Pull Request can then be merged by the contributor or another developer with commit access
+* PR merging should be done using `Squash and Rebase`
 
 ## Git Workflow
 
@@ -27,3 +31,8 @@ Contributors should fork this repo.  Changes should be made in feature branches 
 1. Push to fork repo: `git push`
 
 
+### Create a PR, merge, and clean up
+
+1. On GitHub, switch to branch and click `Create Pull Request`
+1. On CrunchySpatial, review PR
+1. Merge PR using `Squash and Rebase`
