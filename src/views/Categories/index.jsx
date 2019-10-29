@@ -11,6 +11,7 @@ import {
 import ViewHeading from 'components/ViewHeading';
 import MapSearch from 'components/MapSearch';
 import EditForm from './components/EditForm';
+import styles from './index.module.css';
 
 /** @typedef {import('api').Parcel} Parcel */
 
@@ -37,17 +38,24 @@ const Categories = () => {
   };
 
   return (
-    <PageSection variant={PageSectionVariants.light}>
-      <ViewHeading>fire risk category editor and viewer</ViewHeading>
+    <>
+      <PageSection variant={PageSectionVariants.light}>
+        <ViewHeading>
+          fire risk category editor and viewer
+        </ViewHeading>
+      </PageSection>
 
-      <Grid gutter="md">
-        <GridItem span={4}>
-          <MapSearch onSelectParcel={setSelectedParcel} />
-        </GridItem>
+      <PageSection variant={PageSectionVariants.light}>
+        {/* <ViewHeading>fire risk category editor and viewer</ViewHeading> */}
 
-        <GridItem span={8}>
-          <Bullseye>
-            {
+        <Grid gutter="md" className={styles.pageContentContainer}>
+          <GridItem span={6}>
+            <MapSearch onSelectParcel={setSelectedParcel} />
+          </GridItem>
+
+          <GridItem span={6}>
+            <Bullseye>
+              {
               selectedParcel
                 ? (
                   <EditForm
@@ -58,10 +66,11 @@ const Categories = () => {
                 )
                 : <ChooseParcelText />
             }
-          </Bullseye>
-        </GridItem>
-      </Grid>
-    </PageSection>
+            </Bullseye>
+          </GridItem>
+        </Grid>
+      </PageSection>
+    </>
   );
 };
 

@@ -76,12 +76,9 @@ class MapSearch extends React.Component {
     };
 
     return (
-      <div>
-        <div className={styles.square}>
-          <div className={styles.content}>
-            <ParcelMap onParcelClick={onSelectParcel} />
-          </div>
-        </div>
+      <div className={styles.container}>
+        <ParcelMap onParcelClick={onSelectParcel} />
+
         <SearchForm onSubmit={doParcelSearch} />
         {errorMessage || <SearchResults />}
       </div>
