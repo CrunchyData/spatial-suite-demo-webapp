@@ -1,5 +1,7 @@
 # Contributing
 
+Contributors should fork this repo.  Changes should be made in feature branches in their own repo.  A feature is then submitted to this repo via creating a GitHub Pull Request (PR).  The Pull Request can then be merged by the contributor or another developer with commit access.
+
 ## Git Workflow
 
 ### Create personal fork and local repo
@@ -17,5 +19,6 @@
 1. Review changes with `git status`
 1. `git add`
 1. `git commit -m 'msg about new feature'`
+1. `git push`
 
 
