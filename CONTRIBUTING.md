@@ -33,6 +33,13 @@
 
 ### Create a PR, merge, and clean up
 
-1. On GitHub, switch to branch and click `Create Pull Request`
-1. On CrunchySpatial, review PR
-1. Merge PR using `Squash and Rebase`
+1. On GitHub fork, switch to branch and click **[Create Pull Request]**
+1. On GitHub CrunchySpatial, review PR
+1. Fix any conflicts (voodoo goes here - more info needed)
+1. Merge PR using **[Squash and Rebase]**
+1. Delete the fork feature branch
+1. On local machine...
+1. Switch to master branch: `git checkout master`
+1. Synch with upstream: `git pull upstream master`
+1. IF all is well, delete feature branch: `git branch -D new-feature`
+
