@@ -38,7 +38,9 @@
 1. Fix any conflicts (voodoo goes here - more info needed)
 1. Merge PR using **[Squash and Rebase]**
 1. Delete the fork feature branch
-1. On local machine...
+
+### Clean up local repo
+
 1. Switch to master branch: `git checkout master`
 1. Synch with upstream: `git pull upstream master`
 1. IF all is well, delete feature branch: `git branch -D new-feature`
