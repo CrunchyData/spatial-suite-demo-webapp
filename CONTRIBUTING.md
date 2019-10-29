@@ -12,17 +12,18 @@ Contributors should fork this repo.  Changes should be made in feature branches 
 1. `git clone git@github.com:my-gh/spatial-suite-demo-webapp.git`
 1. `cd spatial-suite-demo-webapp`
 1. Add CrunchyData repo as remote `upstream` using `git remote add upstream git@github.com:CrunchyData/spatial-suite-demo-webapp.git`
-1. Check remotes with `git remote -v`
+1. Check remotes: `git remote -v`
+1. Synch with upstream: `git pull upstream master`
 
 ### Work with a Feature Branch
 
-1. Start on `master` branch (confirm with `git status`)
-1. Synch with upstream using `git pull upstream master`
-1. `git checkout -b new-feature`
+1. Start on master branch: `git checkout master` (confirm with `git status`)
+1. Synch with upstream: `git pull upstream master`
+1. Create feature branch: `git checkout -b new-feature`
 1. Make changes
 1. Review changes with `git status`
-1. `git add`
-1. `git commit -m 'msg about new feature'`
-1. `git push`
+1. Stage changes: `git add -A` or `git add ...`
+1. Commit changes: `git commit -m 'msg about new feature'`
+1. Push to fork repo: `git push`
 
 
