@@ -116,7 +116,7 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 
 ## Contributing
 
-Given the small size and simplicity of this project, we can commit straight to `master`, for now.
+See [CONTRIBUTING](CONTRIBUTING.md)
 
 ## Learn More
 
