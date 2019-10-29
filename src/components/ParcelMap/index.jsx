@@ -1,6 +1,7 @@
 import React, {
   useCallback, useEffect, useLayoutEffect, useRef,
 } from 'react';
+import 'ol/ol.css';
 import CrunchyMap from './CrunchyMap';
 import styles from './index.module.scss';
 
