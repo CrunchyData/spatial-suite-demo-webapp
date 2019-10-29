@@ -31,7 +31,7 @@
 1. Push to fork repo: `git push`
 
 
-### Create a PR, merge, and clean up
+### Create and merge a GitHub PR
 
 1. On GitHub fork, switch to branch and click **[Create Pull Request]**
 1. On GitHub CrunchySpatial, review PR
