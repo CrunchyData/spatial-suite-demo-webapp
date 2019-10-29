@@ -17,7 +17,7 @@ Contributors should fork this repo.  Changes should be made in feature branches 
 ### Work with a Feature Branch
 
 1. Start on `master` branch (confirm with `git status`)
-1. Ensure it is 
+1. Synch with upstream using `git pull upstream master`
 1. `git checkout -b new-feature`
 1. Make changes
 1. Review changes with `git status`
