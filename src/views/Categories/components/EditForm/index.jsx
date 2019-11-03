@@ -4,9 +4,11 @@ import {
   Button,
   ButtonVariant,
   Form,
+  FormGroup,
   FormSelect,
   FormSelectOption,
 } from '@patternfly/react-core';
+import styles from './index.module.scss';
 
 /** @typedef {import('api').Parcel} Parcel */
 
@@ -50,15 +52,17 @@ const EditForm = props => {
 
   return (
     <Form onSubmit={handleFormSubmit}>
-      <FormSelect
-        value={parcel.isFireHazard ? 'yes' : 'no'}
-        onChange={handleFireHazardChange}
-        aria-label="Is this parcel a fire hazard?"
-      >
-        <FormSelectOption value="yes" label="Yes" />
-        <FormSelectOption value="no" label="No" />
-      </FormSelect>
-      <ActionGroup>
+      <FormGroup className={styles.formGroup} label="Is this parcel a fire hazard?">
+        <FormSelect
+          value={parcel.isFireHazard ? 'yes' : 'no'}
+          onChange={handleFireHazardChange}
+          aria-label="Is this parcel a fire hazard?"
+        >
+          <FormSelectOption value="yes" label="Yes" />
+          <FormSelectOption value="no" label="No" />
+        </FormSelect>
+      </FormGroup>
+      <ActionGroup className={styles.actionGroup}>
         <Button
           variant={ButtonVariant.secondary}
           onClick={onCancelButtonClick}
