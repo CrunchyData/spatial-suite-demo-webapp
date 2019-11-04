@@ -1,4 +1,6 @@
-# Crunchy Data PostGIS Day Demo
+# Crunchy Data PostGIS Day Demo - Web Client
+
+See also service layer: https://github.com/CrunchyData/spatial-suite-rest-demo
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
