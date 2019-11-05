@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
 import {
-  Bullseye,
-  Grid,
-  GridItem,
+  Card,
+  CardBody,
   PageSection,
   PageSectionVariants,
   TextContent,
   Text,
 } from '@patternfly/react-core';
-import ViewHeading from 'components/ViewHeading';
 import MapSearch from 'components/MapSearch';
 import NotifyForm from './components/NotifyForm';
 import styles from './index.module.css';
@@ -37,38 +35,28 @@ const Notifier = () => {
     setSelectedParcel(parcel);
   };
 
+  const classes = selectedParcel ? `${styles.card} ${styles.expanded}` : `${styles.card}`;
+
   return (
-    <>
-      <PageSection variant={PageSectionVariants.light}>
-        <ViewHeading>
-          fire notifier
-        </ViewHeading>
-      </PageSection>
+    <PageSection variant={PageSectionVariants.light} className={styles.pageSection}>
+      <MapSearch onSelectParcel={setSelectedParcel} />
 
-      <PageSection variant={PageSectionVariants.light}>
-        <Grid gutter="md" className={styles.pageContentContainer}>
-          <GridItem span={6}>
-            <MapSearch onSelectParcel={setSelectedParcel} />
-          </GridItem>
-
-          <GridItem span={6}>
-            <Bullseye>
-              {
-              selectedParcel
-                ? (
-                  <NotifyForm
-                    onCancelButtonClick={handleCancelButtonClick}
-                    onNotifyButtonClick={handleNotifyButtonClick}
-                    parcel={selectedParcel}
-                  />
-                )
-                : <ChooseParcelText />
-            }
-            </Bullseye>
-          </GridItem>
-        </Grid>
-      </PageSection>
-    </>
+      <Card className={classes}>
+        <CardBody>
+          {
+          selectedParcel
+            ? (
+              <NotifyForm
+                onCancelButtonClick={handleCancelButtonClick}
+                onNotifyButtonClick={handleNotifyButtonClick}
+                parcel={selectedParcel}
+              />
+            )
+            : <ChooseParcelText />
+          }
+        </CardBody>
+      </Card>
+    </PageSection>
   );
 };
 
