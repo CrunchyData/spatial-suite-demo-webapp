@@ -4,3 +4,18 @@
   padding: 0;
   position: relative;
 }
+
+.card {
+  position: absolute;
+  left: 0;
+  top: 0;
+  box-shadow: 6px 6px 20px 0px rgba(0,0,0,0.5);
+  height: 4.65rem;
+  width: 300px;
+  transition: height 0.75s ease-in-out;
+}
+
+.expanded {
+  overflow: hidden;
+  height: 11.65rem;
+}

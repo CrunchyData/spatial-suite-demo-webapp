@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import {
-  Bullseye,
+  Card,
+  CardBody,
   PageSection,
   PageSectionVariants,
   TextContent,
@@ -34,23 +35,27 @@ const Categories = () => {
     setSelectedParcel(parcel);
   };
 
+  const classes = selectedParcel ? `${styles.card} ${styles.expanded}` : `${styles.card}`;
+
   return (
     <PageSection variant={PageSectionVariants.light} className={styles.pageSection}>
       <MapSearch onSelectParcel={setSelectedParcel} />
 
-      <Bullseye>
-        {
-        selectedParcel
-          ? (
-            <EditForm
-              onCancelButtonClick={handleCancelButtonClick}
-              onSaveButtonClick={handleSaveButtonClick}
-              parcel={selectedParcel}
-            />
-          )
-          : <ChooseParcelText />
-      }
-      </Bullseye>
+      <Card className={classes}>
+        <CardBody>
+          {
+          selectedParcel
+            ? (
+              <EditForm
+                onCancelButtonClick={handleCancelButtonClick}
+                onSaveButtonClick={handleSaveButtonClick}
+                parcel={selectedParcel}
+              />
+            )
+            : <ChooseParcelText />
+          }
+        </CardBody>
+      </Card>
     </PageSection>
   );
 };
