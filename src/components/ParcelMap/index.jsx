@@ -5,7 +5,7 @@ import 'ol/ol.css';
 import CrunchyMap from './CrunchyMap';
 import styles from './index.module.scss';
 
-/** @typedef {import('ol/Map').default} MapInstance */
+/** @typedef {ReturnType<typeof CrunchyMap>} CrunchyMapInstance */
 /** @typedef {import('api').Parcel} Parcel */
 
 /**
@@ -18,16 +18,17 @@ import styles from './index.module.scss';
 /**
  * OpenLayers map component
  * @param {Object} props
+ * @param {Array<Parcel>} [props.highlightParcels]
  * @param {ParcelClickHandler} [props.onParcelClick]
  */
-const ParcelMap = ({ onParcelClick }) => {
+const ParcelMap = ({ highlightParcels, onParcelClick }) => {
   const refMapContainer = useRef(null);
   const refPopupCloser = useRef(null);
   const refPopupContainer = useRef(null);
   const refPopupContent = useRef(null);
 
   // In case we need to access the Map instance at some point
-  /** @type {React.MutableRefObject<MapInstance | null>} MapInstanceRef */
+  /** @type {React.MutableRefObject<CrunchyMapInstance | null>} MapInstanceRef */
   const refMapInstance = useRef(null);
 
   // This is our layout effect's only dependency.
@@ -56,6 +57,16 @@ const ParcelMap = ({ onParcelClick }) => {
       }
     },
     [handleParcelClick],
+  );
+
+  // When the `highlightParcels` prop changes, update the map
+  useEffect(
+    () => {
+      if (highlightParcels && refMapInstance.current) {
+        refMapInstance.current.highlightParcels(highlightParcels);
+      }
+    },
+    [highlightParcels],
   );
 
   return (

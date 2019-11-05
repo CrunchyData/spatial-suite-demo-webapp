@@ -174,7 +174,24 @@ export default function CrunchyMap(props) {
     overlay.setPosition(coordinate);
   }
 
-  return map;
+  /**
+   * Highlights selected parcels
+   * @param {Array<Parcel>} [parcels] - Array of parcels
+   */
+  function highlightParcels(parcels = []) {
+    // 1. Clear previously-selected parcels
+    // 2. Iterate through the `parcels` array and highlight them?
+
+    // clearHighlightedParcels();
+    // parcels.forEach(parcel => {
+    //   highlightSingleParcel(parcel);
+    // })
+  }
+
+  return {
+    olMap: map,
+    highlightParcels,
+  };
 }
 
 async function fetchGlStyle() {
