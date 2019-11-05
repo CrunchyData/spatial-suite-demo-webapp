@@ -1,6 +1,11 @@
 .container {
-  height: 400px;
+  height: 100%;
   width: 100%;
+
+  :global(.ol-zoom) {
+    right: 0.5rem;
+    left: auto;
+  }
 }
 
 .popup {
