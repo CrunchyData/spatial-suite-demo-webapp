@@ -52,8 +52,13 @@ const EditForm = props => {
 
   return (
     <Form onSubmit={handleFormSubmit}>
-      <FormGroup className={styles.formGroup} label="Is this parcel a fire hazard?">
+      <FormGroup
+        className={styles.formGroup}
+        fieldId="fire-hazard"
+        label="Is this parcel a fire hazard?"
+      >
         <FormSelect
+          id="fire-hazard"
           value={parcel.isFireHazard ? 'yes' : 'no'}
           onChange={handleFireHazardChange}
           aria-label="Is this parcel a fire hazard?"
