@@ -10,6 +10,7 @@ import {
 import AddressSearch from 'components/AddressSearch';
 import ParcelMap from 'components/ParcelMap';
 import useAddressSearchStore from 'components/AddressSearch/useAddressSearchStore';
+import useDistanceSearchStore from './components/useDistanceSearchStore';
 import NotifyForm from './components/NotifyForm';
 import styles from './index.module.css';
 
@@ -20,13 +21,14 @@ const selectedParcelInitialState = null;
 
 const ChooseParcelText = () => (
   <TextContent>
-    <Text>Search for an address or select a parcel to notify.</Text>
+    <Text>Please search for an address or select a parcel to notify.</Text>
   </TextContent>
 );
 
 const Notifier = () => {
   const [selectedParcel, setSelectedParcel] = useState(selectedParcelInitialState);
   const addressSearchStore = useAddressSearchStore();
+  const distanceSearchStore = useDistanceSearchStore();
 
   const handleCancelButtonClick = () => {
     // Deselect the parcel and clear search results
@@ -69,6 +71,8 @@ const Notifier = () => {
           selectedParcel
             ? (
               <NotifyForm
+                store={distanceSearchStore}
+                onSelectParcel={handleSelectParcelSearchResult}
                 onCancelButtonClick={handleCancelButtonClick}
                 onNotifyButtonClick={handleNotifyButtonClick}
                 parcel={selectedParcel}

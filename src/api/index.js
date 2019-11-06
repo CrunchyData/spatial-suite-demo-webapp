@@ -34,6 +34,20 @@ const api = {
 
       return response;
     },
+    /**
+      * Simulates an API request to search parcels
+      * @typedef {Object} SurroundingParcels
+      * @property {string} acres
+      * @property {string} address
+      * @property {string} geom
+      * @property {string} parcelid
+      */
+    async getSurroundingParcels(parcelId, distance) {
+      const url = `/notify/parcel-and-distance?parcelid=${parcelId}&dist=${distance}`;
+      const response = await fetch(url);
+      const json = await response.json();
+      return json;
+    },
   },
 };
 

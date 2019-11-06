@@ -2,6 +2,7 @@
   "name": "spatial-suite",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://rest-services-scfire.openshift-pousty-apps.gce-containers.crunchydata.com",
   "dependencies": {
     "@patternfly/react-core": "^3.112.3",
     "@patternfly/react-icons": "^3.14.12",
