@@ -12,7 +12,7 @@ import View from 'ol/View';
 import {
   Fill, Stroke, Style, Text,
 } from 'ol/style';
-import {extend} from 'ol/extent';
+import { extend } from 'ol/extent';
 
 /** @typedef {import('ol').MapBrowserEvent} MapBrowserEvent */
 /** @typedef {import('api').Parcel} Parcel */
@@ -22,6 +22,9 @@ const MAP_CENTER = [-122.0283, 37.0405];
 const MAP_ZOOM = 16;
 const ATTR_APN = 'apn';
 const ATTR_FIREHAZ = 'firehazard';
+const CLR = {
+  selectedStroke: '#8532a8'
+};
 
 const URL_BASE_SC = 'http://sc-tileserver-gl-scfire.openshift-pousty-apps.gce-containers.crunchydata.com';
 const URL_DATA_SC = 'http://tegola-scfire.openshift-pousty-apps.gce-containers.crunchydata.com';
@@ -99,8 +102,8 @@ export default function CrunchyMap(props) {
       maxZoom: 16,
     }),
   });
-  const layerMarkup = new VectorLayer({
-    style: createStyleMarkup,
+  const layerSelect = new VectorLayer({
+    style: createStyleSelected,
     source: new VectorSource({
       features: []
     })
@@ -108,13 +111,13 @@ export default function CrunchyMap(props) {
 
   map.addLayer(layerBase);
   map.addLayer(layerData);
-  map.addLayer(layerMarkup);
+  map.addLayer(layerSelect);
 
   highlightParcels();
 
   function dataStyle(feature) {
     if (isHighlighted(feature)) {
-      return createStyleSelected(feature);
+      return createStyleHighlight(feature);
     }
     if (feature.get(ATTR_FIREHAZ) === 'Yes') {
       return createStyleFire(feature);
@@ -199,7 +202,9 @@ export default function CrunchyMap(props) {
     // parcels.forEach(parcel => {
     //   highlightSingleParcel(parcel);
     // })
-    layerDrawParcels( map, layerMarkup, MOCK_data );
+    let features = parseParcelFeatures( MOCK_data );
+    layerSetFeatures( layerSelect, features );
+    zoomToExtent( map, featuresExtent( features ));
   }
 
   return {
@@ -213,18 +218,18 @@ async function fetchGlStyle() {
   return response.json();
 }
 
-const styleMarkup = new Style({
+const styleSelected = new Style({
   stroke: new Stroke({
-      color: '#fc6f03',
+      color: CLR.selectedStroke,
       width: 3
   })
 });
 
-function createStyleMarkup() {
-  return styleMarkup;
+function createStyleSelected() {
+  return styleSelected;
 }
 
-function createStyleSelected(feature) {
+function createStyleHighlight(feature) {
   return new Style({
     fill: new Fill({ color: 'rgba(200,200,20,0.2)' }),
     stroke: new Stroke({
@@ -272,48 +277,35 @@ function createStyleFire(feature) {
 
 const FORMAT_WKT = new WKT();
 
-function layerDrawParcels(map, lyr, data = []) {
+function layerSetFeatures(lyr, features = []) {
     let source = lyr.getSource();
     source.clear();
-
-    let features = parseParcelFeatures( data );
     source.addFeatures( features );
-    zoomToExtent( map, extentFeatures( features ));
 }
 
-function zoomToExtent( map, extent ) {
-    // null data clears markup
+function zoomToExtent( map, extent, pad = 50 ) {
     if ( ! extent ) return;
-    const PAD = 50;
-    map.getView().fit( extent, { padding: [ PAD, PAD, PAD, PAD ] } );
+    map.getView().fit( extent, { padding: [ pad, pad, pad, pad ] } );
 }
 
-function extentFeatures( features ) {
-    let extent = null;
-    for (var i = 0; i < features.length; i++) {
-        let ext = features[i].getGeometry().getExtent();
-        extent = extent ? extend(ext, extent) : ext;
-    }
-    return extent;
+function featuresExtent( features ) {
+  let extent = null;
+  features.forEach(feature => {
+      let ext = feature.getGeometry().getExtent();
+      extent = extent ? extend(ext, extent) : ext;
+  });
+  return extent;
 }
 
 function parseParcelFeatures( data ) {
-    let features = [];
-    for (var i = 0; i < data.length; i++) {
-        let wkt = data[i].geom;
-        let feat = FORMAT_WKT.readFeature(wkt, {
-            dataProjection: 'EPSG:4326',
-            featureProjection: 'EPSG:3857'
-          });
-          //feat.setStyle( styleMarkup );
-          features.push( feat );
-    }
-    return features;
-}
-
-function layerClear(lyr) {
-    let source = lyr.getSource();
-    source.clear();
+  return data.map( item => {
+      let wkt = item.geom;
+      let feat = FORMAT_WKT.readFeature(wkt, {
+          dataProjection: 'EPSG:4326',
+          featureProjection: 'EPSG:3857'
+        });
+      return feat;
+  } );
 }
 
 var MOCK_data = [
