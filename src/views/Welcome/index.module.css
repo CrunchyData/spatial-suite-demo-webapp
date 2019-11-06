@@ -4,3 +4,7 @@
   font-size: 2.75rem;
   height: 100%;
 }
+
+.logo {
+  max-width: 100%;
+}

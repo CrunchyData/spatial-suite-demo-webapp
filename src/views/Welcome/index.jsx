@@ -13,7 +13,7 @@ const Welcome = () => (
   <PageSection>
     <Grid gutter="md">
       <GridItem span={6}>
-        <Logo />
+        <Logo className={styles.logo} />
       </GridItem>
       <GridItem span={6}>
         <TextContent className={styles.pageHeader}>
