@@ -1,5 +1,6 @@
 import React from 'react';
 import { List, Button, ListItem } from '@patternfly/react-core';
+import styles from '../index.module.scss';
 
 /** @typedef {import('api/index').Parcel} Parcel */
 
@@ -10,7 +11,7 @@ import { List, Button, ListItem } from '@patternfly/react-core';
  * @param {Array<Parcel>} props.parcelSearchResults
  */
 const SearchResultsList = ({ onSelectParcel, parcelSearchResults }) => (
-  <List>
+  <List className={styles.list}>
     {parcelSearchResults.map((parcel, idx) => {
       const handleClick = () => {
         onSelectParcel(parcel);

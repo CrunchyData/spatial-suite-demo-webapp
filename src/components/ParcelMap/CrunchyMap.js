@@ -14,7 +14,7 @@ import {
 /** @typedef {import('api').Parcel} Parcel */
 /** @typedef {import('./index').ParcelClickHandler} ParcelClickHandler */
 
-const MAP_CENTER = [ -122.0283, 37.0405 ];
+const MAP_CENTER = [-122.0283, 37.0405];
 const MAP_ZOOM = 16;
 const ATTR_APN = 'apn';
 const ATTR_FIREHAZ = 'firehazard';
@@ -60,7 +60,7 @@ export default function CrunchyMap(props) {
     target: mapContainer,
     overlays: [overlay],
     view: new View({
-      center: fromLonLat( MAP_CENTER ),
+      center: fromLonLat(MAP_CENTER),
       zoom: MAP_ZOOM,
     }),
   });
@@ -120,7 +120,7 @@ export default function CrunchyMap(props) {
 
     highlightFeature(feature);
 
-    if (! feature || feature.get('layer') !== 'parcels') {
+    if (!feature || feature.get('layer') !== 'parcels') {
       overlay.setPosition(undefined);
       return;
     }
