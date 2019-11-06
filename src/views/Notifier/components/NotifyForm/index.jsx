@@ -5,9 +5,9 @@ import {
   ButtonVariant,
   Form,
 } from '@patternfly/react-core';
-import FormHeading from 'components/FormHeading';
 import SearchForm from './components/SearchForm';
 import SearchResultsList from './components/SearchResultsList';
+import styles from './index.module.scss';
 
 /** @typedef {import('api').Parcel} Parcel */
 
@@ -39,12 +39,9 @@ const NotifyForm = props => {
 
   return (
     <Form onSubmit={handleFormSubmit}>
-      <FormHeading>
-        Notify Parcels
-      </FormHeading>
       <SearchForm />
       <SearchResultsList />
-      <ActionGroup>
+      <ActionGroup className={styles.actionGroup}>
         <Button
           variant={ButtonVariant.secondary}
           onClick={onCancelButtonClick}
