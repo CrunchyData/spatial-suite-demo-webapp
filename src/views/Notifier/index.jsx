@@ -8,6 +8,7 @@ import {
   Text,
 } from '@patternfly/react-core';
 import AddressSearch from 'components/AddressSearch';
+import useAddressSearchStore from 'components/AddressSearch/useAddressSearchStore';
 import NotifyForm from './components/NotifyForm';
 import styles from './index.module.css';
 
@@ -24,6 +25,7 @@ const ChooseParcelText = () => (
 
 const Notifier = () => {
   const [selectedParcel, setSelectedParcel] = useState(selectedParcelInitialState);
+  const addressSearchStore = useAddressSearchStore();
 
   const handleCancelButtonClick = () => {
     // Deselect the parcel
@@ -39,7 +41,7 @@ const Notifier = () => {
 
   return (
     <PageSection variant={PageSectionVariants.light} className={styles.pageSection}>
-      <AddressSearch onSelectParcel={setSelectedParcel} />
+      <AddressSearch store={addressSearchStore} onSelectParcel={setSelectedParcel} />
 
       <Card className={classes}>
         <CardBody>

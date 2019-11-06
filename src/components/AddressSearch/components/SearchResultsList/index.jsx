@@ -1,8 +1,8 @@
 import React from 'react';
 import { List, Button, ListItem } from '@patternfly/react-core';
-import styles from '../index.module.scss';
+import styles from './index.module.scss';
 
-/** @typedef {import('api/index').Parcel} Parcel */
+/** @typedef {import('api').Parcel} Parcel */
 
 /**
  * Lists search results

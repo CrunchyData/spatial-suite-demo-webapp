@@ -1,90 +1,59 @@
+// @ts-check
 import React from 'react';
 import { Spinner } from '@patternfly/react-core/dist/js/experimental';
-import api from 'api';
 import SearchForm from './components/SearchForm';
 import SearchResultsList from './components/SearchResultsList';
 import styles from './index.module.scss';
 
 /** @typedef {import('api').Parcel} Parcel */
+/** @typedef {ReturnType<typeof import('./useAddressSearchStore').default>} Store */
 
 /**
  * AddressSearch component props
- * @typedef {Object} Props
- * @property {function(boolean): void} onHasSearchResults
+ * @typedef {Object} AddressSearchProps
+ * @property {Store} store
  * @property {function(Parcel): void} onSelectParcel - Callback to handle when the user
- * selects a parcel from the map or search results
+ *     selects a parcel from the map or search results
  */
 
 /**
- * Parcel map and search field
- * @extends {React.Component<Props>}
+ * Renders a loading spinner while the search is in progress, or the list of search results if
+ *     the search has finished.
+ * @param {Object} props
+ * @param {Store} props.store
+ * @param {AddressSearchProps['onSelectParcel']} props.onSelectParcel
  */
-class AddressSearch extends React.Component {
-  state = {
-    errorMessage: '',
-    isSearchInProgress: false,
-    searchResults: [],
-  }
+const SearchResults = ({ onSelectParcel, store }) => {
+  const { isSearchInProgress, searchResults } = store;
 
-  /**
-   * Performs a parcel search with the backend
-   * @param {string} queryText
-   */
-  doParcelSearch = async queryText => {
-    // Update state to indicate that there is a search in progress
-    this.setState({
-      isSearchInProgress: true,
-      searchResults: [],
-      errorMessage: '',
-    });
-    this.props.onHasSearchResults(true);
+  if (isSearchInProgress) return <Spinner />;
 
-    try {
-      const searchResults = await api.parcels.search(queryText);
+  return (
+    <SearchResultsList
+      parcelSearchResults={searchResults}
+      onSelectParcel={onSelectParcel}
+    />
+  );
+};
 
-      // Store results in state
-      this.setState({
-        isSearchInProgress: false,
-        searchResults,
-      });
-      this.props.onHasSearchResults(Boolean(searchResults.length));
-    } catch {
-      // Request was unsuccessful
-      this.setState({
-        isSearchInProgress: false,
-        errorMessage: 'An error occurred',
-      });
-      this.props.onHasSearchResults(false);
-    }
-  };
+/**
+ * Address search form
+ * @param {AddressSearchProps} props
+ */
+const AddressSearch = ({ store, onSelectParcel }) => {
+  const { errorMessage, search } = store;
 
-  render() {
-    // Alias some things
-    const { onSelectParcel } = this.props;
-    const { errorMessage, isSearchInProgress, searchResults } = this.state;
-    const { doParcelSearch } = this;
-
-    /**
-     * Renders a loading spinner while the search is in progress, or the list of search results if
-     *     the search has finished.
-     */
-    const SearchResults = () => {
-      if (isSearchInProgress) return <Spinner />;
-      return (
-        <SearchResultsList
-          parcelSearchResults={searchResults}
+  return (
+    <div className={styles.container}>
+      <SearchForm onSubmit={search} />
+      {errorMessage || (
+        <SearchResults
           onSelectParcel={onSelectParcel}
+          store={store}
         />
-      );
-    };
-
-    return (
-      <div className={styles.container}>
-        <SearchForm onSubmit={doParcelSearch} />
-        {errorMessage || <SearchResults />}
-      </div>
-    );
-  }
-}
+      )}
+    </div>
+  );
+};
 
 export default AddressSearch;
