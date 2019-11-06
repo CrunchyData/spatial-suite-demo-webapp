@@ -20,7 +20,7 @@ const selectedParcelInitialState = null;
 
 const ChooseParcelText = () => (
   <TextContent>
-    <Text>Select a parcel to notify.</Text>
+    <Text>Search for an address or select a parcel to notify.</Text>
   </TextContent>
 );
 
@@ -29,13 +29,22 @@ const Notifier = () => {
   const addressSearchStore = useAddressSearchStore();
 
   const handleCancelButtonClick = () => {
-    // Deselect the parcel
+    // Deselect the parcel and clear search results
     setSelectedParcel(selectedParcelInitialState);
+    addressSearchStore.clearSearchResults();
   };
 
   const handleNotifyButtonClick = parcel => {
     // TODO: Send notification about selected parcels to backend
+    // Send a notification about selected parcel and clear search results
     setSelectedParcel(parcel);
+    addressSearchStore.clearSearchResults();
+  };
+
+  const handleSelectParcelSearchResult = parcel => {
+    // Set selected parcel and clear search results
+    setSelectedParcel(parcel);
+    addressSearchStore.clearSearchResults();
   };
 
   const expandedContent = Boolean(
@@ -54,7 +63,7 @@ const Notifier = () => {
         <CardBody>
           <AddressSearch
             store={addressSearchStore}
-            onSelectParcel={setSelectedParcel}
+            onSelectParcel={handleSelectParcelSearchResult}
           />
           {
           selectedParcel
