@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import {
   Button,
   ButtonVariant,
+  FormGroup,
   InputGroup,
-  Text,
   TextInput,
 } from '@patternfly/react-core';
 import { SearchIcon } from '@patternfly/react-icons';
+import styles from '../../index.module.scss';
 
 /** @typedef {function(string): void} SubmitHandler */
 
@@ -19,21 +20,25 @@ const SearchForm = () => {
   const [value, setValue] = useState('');
 
   return (
-    <InputGroup>
-      <Text>
-        Search parcels within a distance of
-      </Text>
-      <TextInput
-        type="search"
-        value={value}
-        onChange={setValue}
-        placeholder="50"
-        aria-label="Search parcels within a distance of how many miles?"
-      />
-      <Button variant={ButtonVariant.control}>
-        <SearchIcon />
-      </Button>
-    </InputGroup>
+    <FormGroup
+      className={styles.formGroup}
+      fieldId="mile-search"
+      label="Search parcels within a distance of how many miles?"
+    >
+      <InputGroup>
+        <TextInput
+          id="mile-search"
+          type="search"
+          value={value}
+          onChange={setValue}
+          placeholder="50"
+          aria-label="Search parcels within a distance of how many miles?"
+        />
+        <Button variant={ButtonVariant.control}>
+          <SearchIcon />
+        </Button>
+      </InputGroup>
+    </FormGroup>
   );
 };
 

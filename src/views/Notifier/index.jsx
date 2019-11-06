@@ -8,6 +8,7 @@ import {
   Text,
 } from '@patternfly/react-core';
 import AddressSearch from 'components/AddressSearch';
+import ParcelMap from 'components/ParcelMap';
 import useAddressSearchStore from 'components/AddressSearch/useAddressSearchStore';
 import NotifyForm from './components/NotifyForm';
 import styles from './index.module.css';
@@ -37,14 +38,24 @@ const Notifier = () => {
     setSelectedParcel(parcel);
   };
 
-  const classes = selectedParcel ? `${styles.card} ${styles.expanded}` : `${styles.card}`;
+  const expandedContent = Boolean(
+    selectedParcel
+    || addressSearchStore.isSearchInProgress
+    || addressSearchStore.searchResults.length,
+  );
+
+  const classes = expandedContent ? `${styles.card} ${styles.expanded}` : `${styles.card}`;
 
   return (
     <PageSection variant={PageSectionVariants.light} className={styles.pageSection}>
-      <AddressSearch store={addressSearchStore} onSelectParcel={setSelectedParcel} />
+      <ParcelMap onParcelClick={setSelectedParcel} />
 
       <Card className={classes}>
         <CardBody>
+          <AddressSearch
+            store={addressSearchStore}
+            onSelectParcel={setSelectedParcel}
+          />
           {
           selectedParcel
             ? (

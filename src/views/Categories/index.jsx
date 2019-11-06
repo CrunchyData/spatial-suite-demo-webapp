@@ -35,7 +35,7 @@ const Categories = () => {
     setSelectedParcel(selectedParcelInitialState);
   };
 
-  const handleSaveButtonClick = parcel => {
+  const handleSaveButtonClick = () => {
     // TODO: Send parcel updates to backend
 
     // Deselect the parcel
