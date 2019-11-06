@@ -31,15 +31,22 @@ const Categories = () => {
   const addressSearchStore = useAddressSearchStore();
 
   const handleCancelButtonClick = () => {
-    // Deselect the parcel
+    // Deselect the parcel and clear search results
     setSelectedParcel(selectedParcelInitialState);
+    addressSearchStore.clearSearchResults();
   };
 
-  const handleSaveButtonClick = () => {
+  const handleSaveButtonClick = parcel => {
     // TODO: Send parcel updates to backend
+    // Send parcel updates and clear search results
+    setSelectedParcel(parcel);
+    addressSearchStore.clearSearchResults();
+  };
 
-    // Deselect the parcel
-    setSelectedParcel(selectedParcelInitialState);
+  const handleSelectParcelSearchResult = parcel => {
+    // Set selected parcel and clear search results
+    setSelectedParcel(parcel);
+    addressSearchStore.clearSearchResults();
   };
 
   const expandedContent = Boolean(
@@ -58,7 +65,7 @@ const Categories = () => {
         <CardBody>
           <AddressSearch
             store={addressSearchStore}
-            onSelectParcel={setSelectedParcel}
+            onSelectParcel={handleSelectParcelSearchResult}
           />
           {
           selectedParcel

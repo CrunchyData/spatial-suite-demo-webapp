@@ -43,7 +43,11 @@ export default function useAddressSearchStore() {
         }
       }
 
-      return { search };
+      function clearSearchResults() {
+        setState({ searchResults: [] });
+      }
+
+      return { search, clearSearchResults };
     },
     [setState],
   );
