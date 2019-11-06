@@ -10,6 +10,7 @@ import {
 } from '@patternfly/react-core';
 import AddressSearch from 'components/AddressSearch';
 import ParcelMap from 'components/ParcelMap';
+import useAddressSearchStore from 'components/AddressSearch/useAddressSearchStore';
 import EditForm from './components/EditForm';
 import styles from './index.module.css';
 
@@ -26,7 +27,8 @@ const ChooseParcelText = () => (
 
 const Categories = () => {
   const [selectedParcel, setSelectedParcel] = useState(selectedParcelInitialState);
-  const [hasSearchResults, setHasSearchResults] = useState(false);
+
+  const addressSearchStore = useAddressSearchStore();
 
   const handleCancelButtonClick = () => {
     // Deselect the parcel
@@ -35,10 +37,16 @@ const Categories = () => {
 
   const handleSaveButtonClick = parcel => {
     // TODO: Send parcel updates to backend
-    setSelectedParcel(parcel);
+
+    // Deselect the parcel
+    setSelectedParcel(selectedParcelInitialState);
   };
 
-  const expandedContent = selectedParcel || hasSearchResults;
+  const expandedContent = Boolean(
+    selectedParcel
+    || addressSearchStore.isSearchInProgress
+    || addressSearchStore.searchResults.length,
+  );
 
   const classes = expandedContent ? `${styles.card} ${styles.expanded}` : `${styles.card}`;
 
@@ -49,8 +57,8 @@ const Categories = () => {
       <Card className={classes}>
         <CardBody>
           <AddressSearch
+            store={addressSearchStore}
             onSelectParcel={setSelectedParcel}
-            onHasSearchResults={setHasSearchResults}
           />
           {
           selectedParcel
