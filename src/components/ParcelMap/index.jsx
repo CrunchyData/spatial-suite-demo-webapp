@@ -1,3 +1,4 @@
+// @ts-check
 import React, {
   useCallback, useEffect, useLayoutEffect, useRef,
 } from 'react';
@@ -21,7 +22,8 @@ import styles from './index.module.scss';
  * @param {Array<Parcel>} [props.highlightParcels]
  * @param {ParcelClickHandler} [props.onParcelClick]
  */
-const ParcelMap = ({ highlightParcels, onParcelClick }) => {
+
+const ParcelMap = ({ highlightParcels, onParcelClick = noop }) => {
   const refMapContainer = useRef(null);
   const refPopupCloser = useRef(null);
   const refPopupContainer = useRef(null);
@@ -102,6 +104,7 @@ function useStabilizedCallback(callback) {
 
   // This callback's reference will never change since the external callback is stored in the ref
   /** @type {T} */
+  // @ts-ignore
   const stableCallback = useCallback(
     (...params) => handlerRef.current(...params),
     [], // empty deps, so the reference never changes
@@ -109,5 +112,7 @@ function useStabilizedCallback(callback) {
 
   return stableCallback;
 }
+
+function noop() {}
 
 export default ParcelMap;

@@ -7,7 +7,7 @@ import {
   TextContent,
   Text,
 } from '@patternfly/react-core';
-import MapSearch from 'components/MapSearch';
+import AddressSearch from 'components/AddressSearch';
 import NotifyForm from './components/NotifyForm';
 import styles from './index.module.css';
 
@@ -39,7 +39,7 @@ const Notifier = () => {
 
   return (
     <PageSection variant={PageSectionVariants.light} className={styles.pageSection}>
-      <MapSearch onSelectParcel={setSelectedParcel} />
+      <AddressSearch onSelectParcel={setSelectedParcel} />
 
       <Card className={classes}>
         <CardBody>

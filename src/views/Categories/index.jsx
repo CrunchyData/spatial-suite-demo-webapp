@@ -1,3 +1,4 @@
+// @ts-check
 import React, { useState } from 'react';
 import {
   Card,
@@ -7,7 +8,8 @@ import {
   TextContent,
   Text,
 } from '@patternfly/react-core';
-import MapSearch from 'components/MapSearch';
+import AddressSearch from 'components/AddressSearch';
+import ParcelMap from 'components/ParcelMap';
 import EditForm from './components/EditForm';
 import styles from './index.module.css';
 
@@ -18,12 +20,13 @@ const selectedParcelInitialState = null;
 
 const ChooseParcelText = () => (
   <TextContent>
-    <Text>Please choose a parcel.</Text>
+    <Text>Please search for a specific address or select a parcel from the map.</Text>
   </TextContent>
 );
 
 const Categories = () => {
   const [selectedParcel, setSelectedParcel] = useState(selectedParcelInitialState);
+  const [hasSearchResults, setHasSearchResults] = useState(false);
 
   const handleCancelButtonClick = () => {
     // Deselect the parcel
@@ -35,14 +38,20 @@ const Categories = () => {
     setSelectedParcel(parcel);
   };
 
-  const classes = selectedParcel ? `${styles.card} ${styles.expanded}` : `${styles.card}`;
+  const expandedContent = selectedParcel || hasSearchResults;
+
+  const classes = expandedContent ? `${styles.card} ${styles.expanded}` : `${styles.card}`;
 
   return (
     <PageSection variant={PageSectionVariants.light} className={styles.pageSection}>
-      <MapSearch onSelectParcel={setSelectedParcel} />
+      <ParcelMap onParcelClick={setSelectedParcel} />
 
       <Card className={classes}>
         <CardBody>
+          <AddressSearch
+            onSelectParcel={setSelectedParcel}
+            onHasSearchResults={setHasSearchResults}
+          />
           {
           selectedParcel
             ? (

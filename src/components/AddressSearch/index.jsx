@@ -1,25 +1,25 @@
 import React from 'react';
 import { Spinner } from '@patternfly/react-core/dist/js/experimental';
 import api from 'api';
-import ParcelMap from 'components/ParcelMap';
 import SearchForm from './components/SearchForm';
 import SearchResultsList from './components/SearchResultsList';
-import styles from './index.module.css';
+import styles from './index.module.scss';
 
 /** @typedef {import('api').Parcel} Parcel */
 
 /**
- * MapSearch component props
+ * AddressSearch component props
  * @typedef {Object} Props
+ * @property {function(boolean): void} onHasSearchResults
  * @property {function(Parcel): void} onSelectParcel - Callback to handle when the user
- *     selects a parcel from the map or search results
+ * selects a parcel from the map or search results
  */
 
 /**
  * Parcel map and search field
  * @extends {React.Component<Props>}
  */
-class MapSearch extends React.Component {
+class AddressSearch extends React.Component {
   state = {
     errorMessage: '',
     isSearchInProgress: false,
@@ -37,6 +37,7 @@ class MapSearch extends React.Component {
       searchResults: [],
       errorMessage: '',
     });
+    this.props.onHasSearchResults(true);
 
     try {
       const searchResults = await api.parcels.search(queryText);
@@ -46,12 +47,14 @@ class MapSearch extends React.Component {
         isSearchInProgress: false,
         searchResults,
       });
+      this.props.onHasSearchResults(Boolean(searchResults.length));
     } catch {
       // Request was unsuccessful
       this.setState({
         isSearchInProgress: false,
         errorMessage: 'An error occurred',
       });
+      this.props.onHasSearchResults(false);
     }
   };
 
@@ -77,8 +80,6 @@ class MapSearch extends React.Component {
 
     return (
       <div className={styles.container}>
-        <ParcelMap onParcelClick={onSelectParcel} />
-
         <SearchForm onSubmit={doParcelSearch} />
         {errorMessage || <SearchResults />}
       </div>
@@ -86,4 +87,4 @@ class MapSearch extends React.Component {
   }
 }
 
-export default MapSearch;
+export default AddressSearch;
