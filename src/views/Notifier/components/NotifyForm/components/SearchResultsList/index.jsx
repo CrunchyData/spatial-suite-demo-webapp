@@ -1,25 +1,31 @@
 import React from 'react';
 import { List, Button, ListItem } from '@patternfly/react-core';
-import styles from '../../index.module.scss';
+import styles from './index.module.scss';
+
+/** @typedef {import('api').Parcel} Parcel */
 
 /**
- * Lists search results
- * TODO: List results from backend
+ * Lists search results - all parcels located within the specified distance
+ * @param {Object} props
+ * @param {function(Parcel): void} props.onSelectParcel
+ * @param {Array<Parcel>} props.parcelSearchResults
  */
-const SearchResultsList = () => {
-  const handleClick = event => {
-    event.preventDefault();
-  };
+const SearchResultsList = ({ onSelectParcel, parcelSearchResults }) => (
+  <List className={styles.list}>
+    {parcelSearchResults.map((parcel, idx) => {
+      const handleClick = () => {
+        onSelectParcel(parcel);
+      };
 
-  return (
-    <List className={styles.list}>
-      <ListItem>
-        <Button variant="link" onClick={handleClick}>
-          Example Address
-        </Button>
-      </ListItem>
-    </List>
-  );
-};
+      return (
+        <ListItem key={idx}>
+          <Button variant="link" onClick={handleClick}>
+            {parcel.address}
+          </Button>
+        </ListItem>
+      );
+    })}
+  </List>
+);
 
 export default SearchResultsList;
