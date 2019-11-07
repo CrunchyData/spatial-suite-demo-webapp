@@ -132,6 +132,8 @@ export default function CrunchyMap(props) {
   }
 
   map.on('singleclick', evt => {
+    map.getView().setCenter( evt.coordinate );
+
     const features = map.getFeaturesAtPixel(evt.pixel);
     const feature = features ? features[0] : null;
 
