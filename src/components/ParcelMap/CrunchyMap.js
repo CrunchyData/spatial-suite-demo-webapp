@@ -52,8 +52,8 @@ export default function CrunchyMap(props) {
     onParcelClick = noop,
   } = props;
 
-  /** lookup for highlighted objects */
-  let highlighted = null;
+  /** lookup for highlighted objects  - number value of id */
+  let highlightID = null;
 
   /** layer for popups */
   const overlay = new Overlay({
@@ -117,18 +117,13 @@ export default function CrunchyMap(props) {
   highlightParcels();
 
   function dataStyle(feature) {
-    if (isHighlighted(feature)) {
+    if (isHighlighted(feature.id_)) {
       return createStyleHighlight(feature);
     }
     if (feature.get(ATTR_FIREHAZ) === 'Yes') {
       return createStyleFire(feature);
     }
     return createStyleParcel(feature);
-  }
-
-  function isHighlighted(feature) {
-    if (!highlighted) return false;
-    return feature.id_ === highlighted.id_;
   }
 
   map.on('singleclick', evt => {
@@ -141,6 +136,9 @@ export default function CrunchyMap(props) {
       return;
     }
 
+    const featid = feature.getId();
+    highlightParcel( featid, evt.coordinate );
+
     const parcelId = feature.getId().toString();
     const isFireHazard = feature.get(ATTR_FIREHAZ) === 'Yes';
 
@@ -152,16 +150,22 @@ export default function CrunchyMap(props) {
       isFireHazard,
     };
 
-    map.getView().setCenter( evt.coordinate );
-    highlightFeature(feature);
-    showParcelPopup(evt.coordinate, parcel);
+    showParcelPopup( evt.coordinate, parcel );
     onParcelClick(parcel);
   });
 
-  function highlightFeature(feature) {
-    // add selected feature to lookup
-    highlighted = feature || null;
+  function isHighlighted(id) {
+    if (! highlightID) return false;
+    return id === highlightID;
+  }
 
+  // coordinate must be in map coordinate system (Web Mercator)
+  function highlightParcel(id, coordinate = null) {
+    // add selected feature to lookup
+    highlightID = id || null;
+    if (coordinate) {
+      map.getView().setCenter( coordinate );
+    }
     // force redraw of layer style
     layerData.setStyle(layerData.getStyle());
   }
@@ -177,6 +181,7 @@ export default function CrunchyMap(props) {
    */
   popupCloser.onclick = () => {
     closePopup();
+    highlightParcel();
     return false;
   };
 
@@ -192,7 +197,6 @@ export default function CrunchyMap(props) {
   function closePopup()
   {
     overlay.setPosition(undefined);
-    highlightFeature();
     popupCloser.blur();
   }
 
@@ -208,7 +212,11 @@ export default function CrunchyMap(props) {
     // parcels.forEach(parcel => {
     //   highlightSingleParcel(parcel);
     // })
-    let features = parseParcelFeatures( MOCK_data );
+
+    // TESTING ONLY
+    parcels = MOCK_data;
+
+    let features = parseParcelFeatures( parcels );
     layerSetFeatures( layerSelect, features );
     zoomToExtent( map, featuresExtent( features ));
   }
