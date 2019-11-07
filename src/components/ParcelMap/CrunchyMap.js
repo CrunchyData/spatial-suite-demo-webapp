@@ -95,7 +95,7 @@ export default function CrunchyMap(props) {
     className: 'dataLayer', // needed to avoid base labels disappearing?
     style: dataStyle,
     declutter: true,
-    minZoom: 14,
+    minZoom: 15,
     source: new VectorTileSource({
       format: new MVT(),
       url: `${URL.data}/maps/parcels/{z}/{x}/{y}.pbf`,
