@@ -1,4 +1,5 @@
 /**
+ * Parcel object props
  * @typedef {Object} Parcel
  * @property {string} id
  * @property {string} apn
@@ -6,10 +7,20 @@
  * @property {boolean} isFireHazard
  */
 
+/**
+  * getSurroundingParcels function props
+  * @typedef {Object} SurroundingParcel
+  * @property {string} acres
+  * @property {string} address
+  * @property {string} geom
+  * @property {string} parcelid
+  */
+
+/** Parcel search functions */
 const api = {
   parcels: {
     /**
-     * Simulates an API request to search parcels
+     * Simulates an API request to search parcels by address
      * @param {string} queryText
      * @returns {Promise<Array<Parcel>>}
      */
@@ -35,13 +46,11 @@ const api = {
       return response;
     },
     /**
-      * Simulates an API request to search parcels
-      * @typedef {Object} SurroundingParcels
-      * @property {string} acres
-      * @property {string} address
-      * @property {string} geom
-      * @property {string} parcelid
-      */
+     * Sends an API request to search parcels by distance
+     * @param {number} parcelId
+     * @param {number} distance
+     * @returns {Promise<Array<SurroundingParcel>>}
+     */
     async getSurroundingParcels(parcelId, distance) {
       const url = `/notify/parcel-and-distance?parcelid=${parcelId}&dist=${distance}`;
       const response = await fetch(url);
