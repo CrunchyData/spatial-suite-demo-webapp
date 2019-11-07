@@ -132,15 +132,12 @@ export default function CrunchyMap(props) {
   }
 
   map.on('singleclick', evt => {
-    map.getView().setCenter( evt.coordinate );
 
     const features = map.getFeaturesAtPixel(evt.pixel);
     const feature = features ? features[0] : null;
 
-    highlightFeature(feature);
-
     if (!feature || feature.get('layer') !== 'parcels') {
-      overlay.setPosition(undefined);
+      closePopup();
       return;
     }
 
@@ -155,7 +152,9 @@ export default function CrunchyMap(props) {
       isFireHazard,
     };
 
-    showParcelPopup(evt, parcel);
+    map.getView().setCenter( evt.coordinate );
+    highlightFeature(feature);
+    showParcelPopup(evt.coordinate, parcel);
     onParcelClick(parcel);
   });
 
@@ -177,7 +176,7 @@ export default function CrunchyMap(props) {
    * @return {boolean} Don't follow the href.
    */
   popupCloser.onclick = () => {
-    closeParcelPopup();
+    closePopup();
     return false;
   };
 
@@ -185,13 +184,12 @@ export default function CrunchyMap(props) {
    * @param {MapBrowserEvent} evt
    * @param {Parcel} parcel
    */
-  function showParcelPopup(evt, parcel) {
-    const { coordinate } = evt;
+  function showParcelPopup(coordinate, parcel) {
     const { id, apn } = parcel;
     popupContent.innerHTML = `<p><b>Parcel ${id}</b></p> <p>APN: ${apn}</p>`;
     overlay.setPosition(coordinate);
   }
-  function closeParcelPopup()
+  function closePopup()
   {
     overlay.setPosition(undefined);
     highlightFeature();
