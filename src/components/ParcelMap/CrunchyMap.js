@@ -174,8 +174,7 @@ export default function CrunchyMap(props) {
    * @return {boolean} Don't follow the href.
    */
   popupCloser.onclick = () => {
-    overlay.setPosition(undefined);
-    popupCloser.blur();
+    closeParcelPopup();
     return false;
   };
 
@@ -188,6 +187,12 @@ export default function CrunchyMap(props) {
     const { id, apn } = parcel;
     popupContent.innerHTML = `<p><b>Parcel ${id}</b></p> <p>APN: ${apn}</p>`;
     overlay.setPosition(coordinate);
+  }
+  function closeParcelPopup()
+  {
+    overlay.setPosition(undefined);
+    highlightFeature();
+    popupCloser.blur();
   }
 
   /**
