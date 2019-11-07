@@ -23,7 +23,8 @@ const MAP_ZOOM = 16;
 const ATTR_APN = 'apn';
 const ATTR_FIREHAZ = 'firehazard';
 const CLR = {
-  selectedStroke: '#8532a8'
+  selectedStroke: '#8532a8',
+  selectedFill: '#8532a830'
 };
 
 const URL_BASE_SC = 'http://sc-tileserver-gl-scfire.openshift-pousty-apps.gce-containers.crunchydata.com';
@@ -131,6 +132,8 @@ export default function CrunchyMap(props) {
   }
 
   map.on('singleclick', evt => {
+    map.getView().setCenter( evt.coordinate );
+
     const features = map.getFeaturesAtPixel(evt.pixel);
     const feature = features ? features[0] : null;
 
@@ -174,8 +177,7 @@ export default function CrunchyMap(props) {
    * @return {boolean} Don't follow the href.
    */
   popupCloser.onclick = () => {
-    overlay.setPosition(undefined);
-    popupCloser.blur();
+    closeParcelPopup();
     return false;
   };
 
@@ -188,6 +190,12 @@ export default function CrunchyMap(props) {
     const { id, apn } = parcel;
     popupContent.innerHTML = `<p><b>Parcel ${id}</b></p> <p>APN: ${apn}</p>`;
     overlay.setPosition(coordinate);
+  }
+  function closeParcelPopup()
+  {
+    overlay.setPosition(undefined);
+    highlightFeature();
+    popupCloser.blur();
   }
 
   /**
@@ -219,6 +227,7 @@ async function fetchGlStyle() {
 }
 
 const styleSelected = new Style({
+  fill: new Fill({ color: CLR.selectedFill }),
   stroke: new Stroke({
       color: CLR.selectedStroke,
       width: 3
