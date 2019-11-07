@@ -16,6 +16,10 @@
   * @property {string} parcelid
   */
 
+const urlBase = process.env.NODE_ENV === 'production'
+  ? 'http://rest-services-scfire.openshift-pousty-apps.gce-containers.crunchydata.com'
+  : '';
+
 /** Parcel search functions */
 const api = {
   parcels: {
@@ -52,7 +56,7 @@ const api = {
      * @returns {Promise<Array<SurroundingParcel>>}
      */
     async getSurroundingParcels(parcelId, distance) {
-      const url = `/notify/parcel-and-distance?parcelid=${parcelId}&dist=${distance}`;
+      const url = `${urlBase}/notify/parcel-and-distance?parcelid=${parcelId}&dist=${distance}`;
       const response = await fetch(url);
       const json = await response.json();
       return json;
