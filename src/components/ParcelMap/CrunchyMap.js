@@ -23,7 +23,8 @@ const MAP_ZOOM = 16;
 const ATTR_APN = 'apn';
 const ATTR_FIREHAZ = 'firehazard';
 const CLR = {
-  selectedStroke: '#8532a8'
+  selectedStroke: '#8532a8',
+  selectedFill: '#8532a830'
 };
 
 const URL_BASE_SC = 'http://sc-tileserver-gl-scfire.openshift-pousty-apps.gce-containers.crunchydata.com';
@@ -224,6 +225,7 @@ async function fetchGlStyle() {
 }
 
 const styleSelected = new Style({
+  fill: new Fill({ color: CLR.selectedFill }),
   stroke: new Stroke({
       color: CLR.selectedStroke,
       width: 3
