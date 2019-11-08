@@ -24,7 +24,10 @@ export default function useAddressSearchStore() {
        */
       async function search(address) {
         if (address) {
-          setState({ isLoading: true });
+          setState({
+            errorMessage: '',
+            isLoading: true,
+          });
 
           try {
             const searchResult = await api.parcels.getParcelCoords(address);
