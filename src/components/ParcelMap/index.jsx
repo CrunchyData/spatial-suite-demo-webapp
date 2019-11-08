@@ -52,18 +52,16 @@ const ParcelMap = ({ surroundingParcels, onParcelClick = noop, parcelCoords }) =
     [handleParcelClick],
   );
 
-  // When the `highlightParcels` prop changes, update the map
   useEffect(
     () => {
       const mapInstance = refMapInstance.current;
       if (surroundingParcels && mapInstance) {
-        refMapInstance.current.highlightParcels(surroundingParcels);
+        refMapInstance.current.selectParcels(surroundingParcels);
       }
     },
-    [surroundingParcels],
+    [surroundingParcels], // Update the map when these props change
   );
 
-  // When the `parcelCoords` prop changes, update the map
   useEffect(
     () => {
       const mapInstance = refMapInstance.current;
@@ -71,7 +69,7 @@ const ParcelMap = ({ surroundingParcels, onParcelClick = noop, parcelCoords }) =
         // TODO: highlight and center the parcel
       }
     },
-    [parcelCoords],
+    [parcelCoords], // Update the map when these props change
   );
 
   return (
