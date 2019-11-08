@@ -38,13 +38,9 @@ const SearchResults = ({ store }) => {
 const DistanceSearch = ({ store }) => {
   const { errorMessage, search } = store;
 
-  const handleSubmit = distance => {
-    search(distance);
-  };
-
   return (
     <div className={styles.container}>
-      <SearchForm onSubmit={handleSubmit} />
+      <SearchForm onSubmit={search} />
       {errorMessage ? (
         <Text>{errorMessage}</Text>
       ) : (

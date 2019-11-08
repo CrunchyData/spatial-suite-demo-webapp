@@ -19,7 +19,7 @@ export default function useDistanceSearchStore(parcelId) {
 
   const actions = useMemo(
     () => {
-      /** @param {number} distance */
+      /** @param {number | string} distance */
       async function search(distance) {
         if (!parcelId) return;
 
