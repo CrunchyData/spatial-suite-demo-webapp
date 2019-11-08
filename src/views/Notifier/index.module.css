@@ -13,9 +13,5 @@
   height: 9rem;
   width: 24.5rem;
   transition: height 0.75s ease-in-out;
-}
-
-.expanded {
-  overflow: auto;
-  height: 100%;
+  overflow: hidden;
 }

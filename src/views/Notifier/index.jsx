@@ -11,12 +11,17 @@ import {
 import AddressSearch from 'components/AddressSearch';
 import ParcelMap from 'components/ParcelMap';
 import useAddressSearchStore from 'components/AddressSearch/useAddressSearchStore';
+import useViewCardStyles from 'hooks/useViewCardStyles';
 import useDistanceSearchStore from './components/useDistanceSearchStore';
 import NotifyForm from './components/NotifyForm';
 import styles from './index.module.css';
 
 /** @typedef {import('api').ParcelCoords} ParcelCoords */
 /** @typedef {import('components/ParcelMap/CrunchyMap').ParcelFromMap} ParcelFromMap */
+
+// IDs for dynamically resizing the card
+const VIEW_CONTAINER_ID = 'notifierView';
+const CARD_BODY_ID = 'notifierCardBody';
 
 /** @type {ParcelFromMap | null} */
 const parcelFromMapInitialState = null;
@@ -67,26 +72,30 @@ const Notifier = () => {
     resetView();
   };
 
-  const expandedContent = Boolean(
-    addressSearchStore.searchResult
-    || addressSearchStore.isLoading
-    || parcelFromMap,
-  );
-
-  const classes = expandedContent ? `${styles.card} ${styles.expanded}` : `${styles.card}`;
+  // Generate the `style` object for the floating card
+  const cardStyle = useViewCardStyles(VIEW_CONTAINER_ID, CARD_BODY_ID);
 
   return (
-    <PageSection variant={PageSectionVariants.light} className={styles.pageSection}>
+    <PageSection
+      id={VIEW_CONTAINER_ID}
+      variant={PageSectionVariants.light}
+      className={styles.pageSection}
+    >
       <ParcelMap
         parcelCoords={addressSearchStore.searchResult}
         onParcelClick={setParcelFromMap}
         surroundingParcels={distanceSearchStore.searchResults}
       />
 
-      <Card className={classes}>
-        <CardBody>
-          <AddressSearch store={addressSearchStore} />
-          {parcelFromMap && <ParcelDetails parcelFromMap={parcelFromMap} />}
+      <Card className={styles.card} style={cardStyle}>
+        <CardBody id={CARD_BODY_ID}>
+          {
+            // If there is a parcel selected, show the parcel details.
+            // Otherwise, show the address search form.
+            parcelFromMap
+              ? <ParcelDetails parcelFromMap={parcelFromMap} />
+              : <AddressSearch store={addressSearchStore} />
+          }
           {
           (parcelFromMap || addressSearchStore.searchResult)
             ? (
