@@ -1,30 +1,21 @@
 import React from 'react';
-import { List, Button, ListItem } from '@patternfly/react-core';
+import { List, ListItem } from '@patternfly/react-core';
 import styles from './index.module.scss';
 
-/** @typedef {import('api').Parcel} Parcel */
+/** @typedef {import('api').SurroundingParcel} SurroundingParcel */
 
 /**
  * Lists search results - all parcels located within the specified distance
  * @param {Object} props
- * @param {function(Parcel): void} props.onSelectParcel
- * @param {Array<Parcel>} props.parcelSearchResults
+ * @param {Array<SurroundingParcel>} props.parcelSearchResults
  */
-const SearchResultsList = ({ onSelectParcel, parcelSearchResults }) => (
+const SearchResultsList = ({ parcelSearchResults }) => (
   <List className={styles.list}>
-    {parcelSearchResults.map((parcel, idx) => {
-      const handleClick = () => {
-        onSelectParcel(parcel);
-      };
-
-      return (
-        <ListItem key={idx}>
-          <Button variant="link" onClick={handleClick}>
-            {parcel.address}
-          </Button>
-        </ListItem>
-      );
-    })}
+    {parcelSearchResults.map((parcel, idx) => (
+      <ListItem key={idx}>
+        {parcel.address}
+      </ListItem>
+    ))}
   </List>
 );
 

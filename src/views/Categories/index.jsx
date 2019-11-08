@@ -33,26 +33,26 @@ const Categories = () => {
   const handleCancelButtonClick = () => {
     // Deselect the parcel and clear search results
     setSelectedParcel(selectedParcelInitialState);
-    addressSearchStore.clearSearchResults();
+    addressSearchStore.clearSearchResult();
   };
 
   const handleSaveButtonClick = parcel => {
     // TODO: Send parcel updates to backend
     // Send parcel updates and clear search results
     setSelectedParcel(parcel);
-    addressSearchStore.clearSearchResults();
+    addressSearchStore.clearSearchResult();
   };
 
   const handleSelectParcelSearchResult = parcel => {
     // Set selected parcel and clear search results
     setSelectedParcel(parcel);
-    addressSearchStore.clearSearchResults();
+    addressSearchStore.clearSearchResult();
   };
 
   const expandedContent = Boolean(
     selectedParcel
-    || addressSearchStore.isSearchInProgress
-    || addressSearchStore.searchResults.length,
+    || addressSearchStore.isLoading
+    || addressSearchStore.searchResult,
   );
 
   const classes = expandedContent ? `${styles.card} ${styles.expanded}` : `${styles.card}`;

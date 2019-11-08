@@ -7,23 +7,26 @@ import CrunchyMap from './CrunchyMap';
 import styles from './index.module.scss';
 
 /** @typedef {ReturnType<typeof CrunchyMap>} CrunchyMapInstance */
-/** @typedef {import('api').Parcel} Parcel */
+/** @typedef {import('api').ParcelCoords} ParcelCoords */
+/** @typedef {import('./CrunchyMap').ParcelFromMap} ParcelFromMap */
+/** @typedef {import('api').SurroundingParcel} SurroundingParcel */
 
 /**
  * Callback that gets called when the user clicks a parcel in the map
  * @callback ParcelClickHandler
- * @param {Parcel} parcel - The parcel that was clicked
+ * @param {ParcelFromMap} parcel - The parcel that was clicked
  * @returns {void}
  */
 
 /**
  * OpenLayers map component
  * @param {Object} props
- * @param {Array<Parcel>} [props.highlightParcels]
+ * @param {Array<SurroundingParcel>} [props.highlightParcels]
  * @param {ParcelClickHandler} [props.onParcelClick]
+ * @param {ParcelCoords | null} [props.parcelCoords]
  */
 
-const ParcelMap = ({ highlightParcels, onParcelClick = noop }) => {
+const ParcelMap = ({ highlightParcels, onParcelClick = noop, parcelCoords }) => {
   const refMapContainer = useRef(null);
   const refPopupCloser = useRef(null);
   const refPopupContainer = useRef(null);
@@ -64,11 +67,23 @@ const ParcelMap = ({ highlightParcels, onParcelClick = noop }) => {
   // When the `highlightParcels` prop changes, update the map
   useEffect(
     () => {
-      if (highlightParcels && refMapInstance.current) {
+      const mapInstance = refMapInstance.current;
+      if (highlightParcels && mapInstance) {
         refMapInstance.current.highlightParcels(highlightParcels);
       }
     },
     [highlightParcels],
+  );
+
+  // When the `parcelCoords` prop changes, update the map
+  useEffect(
+    () => {
+      const mapInstance = refMapInstance.current;
+      if (parcelCoords && mapInstance) {
+        // TODO: highlight and center the parcel
+      }
+    },
+    [parcelCoords],
   );
 
   return (

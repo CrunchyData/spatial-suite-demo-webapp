@@ -3,14 +3,14 @@ import { useMemo } from 'react';
 import api from 'api';
 import useSetState from '../../hooks/useSetState';
 
-/** @typedef {import('api').Parcel} Parcel */
+/** @typedef {import('api').ParcelCoords} ParcelCoords */
 
 const initialState = {
   errorMessage: '',
-  isSearchInProgress: false,
+  isLoading: false,
 
-  /** @type {Array<Parcel>} */
-  searchResults: [],
+  /** @type {ParcelCoords | null} */
+  searchResult: null,
 };
 
 export default function useAddressSearchStore() {
@@ -18,36 +18,35 @@ export default function useAddressSearchStore() {
 
   const actions = useMemo(
     () => {
-      /** @param {string} query */
-      async function search(query) {
-        setState({
-          errorMessage: '',
-          isSearchInProgress: true,
-          searchResults: [],
-        });
+      /**
+       * Looks up an address with the geocoder
+       * @param {string} address
+       */
+      async function search(address) {
+        if (address) {
+          setState({ isLoading: true });
 
-        try {
-          const searchResults = await api.parcels.search(query);
-
-          // Store results in state
-          setState({
-            isSearchInProgress: false,
-            searchResults,
-          });
-        } catch {
-          // Request was unsuccessful
-          setState({
-            isSearchInProgress: false,
-            errorMessage: 'An error occurred',
-          });
+          try {
+            const searchResult = await api.parcels.getParcelCoords(address);
+            setState({
+              isLoading: false,
+              searchResult,
+            });
+          } catch {
+            // Request was unsuccessful
+            setState({
+              isLoading: false,
+              errorMessage: 'An error occurred',
+            });
+          }
         }
       }
 
-      function clearSearchResults() {
-        setState({ searchResults: [] });
+      function clearSearchResult() {
+        setState({ searchResult: null });
       }
 
-      return { search, clearSearchResults };
+      return { clearSearchResult, search };
     },
     [setState],
   );

@@ -15,8 +15,14 @@ import {
 import { extend } from 'ol/extent';
 
 /** @typedef {import('ol').MapBrowserEvent} MapBrowserEvent */
-/** @typedef {import('api').Parcel} Parcel */
 /** @typedef {import('./index').ParcelClickHandler} ParcelClickHandler */
+
+/**
+ * @typedef {Object} ParcelFromMap
+ * @property {string} id
+ * @property {string} apn
+ * @property {boolean} isFireHazard
+ */
 
 const MAP_CENTER = [-122.0283, 37.0405];
 const MAP_ZOOM = 16;
@@ -142,10 +148,9 @@ export default function CrunchyMap(props) {
     const parcelId = feature.getId().toString();
     const isFireHazard = feature.get(ATTR_FIREHAZ) === 'Yes';
 
-    /** @type {Parcel} */
+    /** @type {ParcelFromMap} */
     const parcel = {
       id: parcelId,
-      address: `${parcelId} Example St.`,
       apn: feature.get(ATTR_APN),
       isFireHazard,
     };

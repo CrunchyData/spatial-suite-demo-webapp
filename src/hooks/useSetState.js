@@ -29,7 +29,7 @@ function reducer(state, stateChanges) {
 /**
  * React hook that provides functionality similar to a class component's `this.useState` method
  * @param {State} initialState
- * @returns {[State, function(Partial<State> | StateChangesReducer<State>)]}
+ * @returns {[State, function(Partial<State> | StateChangesReducer<State>): void]}
  * @template {Object} State
  */
 export default function useSetState(initialState) {

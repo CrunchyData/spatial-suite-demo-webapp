@@ -1,3 +1,4 @@
+// @ts-check
 import React from 'react';
 import {
   ActionGroup,
@@ -11,42 +12,34 @@ import SearchForm from './components/SearchForm';
 import SearchResultsList from './components/SearchResultsList';
 import styles from './index.module.scss';
 
-/**
- * DistanceSearch component props
- * @typedef {Object} DistanceSearchProps
- * @property {Store} store
- * @property {function(Parcel): void} onSelectParcel - Callback to handle when the user
- *     selects a parcel from the map or search results
- */
+/** @typedef {ReturnType<typeof import('../useDistanceSearchStore')['default']>} Store */
+
 /**
  * Renders a loading spinner while the search is in progress, or the list of search results if
  *     the search has finished.
  * @param {Object} props
  * @param {Store} props.store
- * @param {DistanceSearchProps['onSelectParcel']} props.onSelectParcel
  */
-const SearchResults = ({ onSelectParcel, store }) => {
+const SearchResults = ({ store }) => {
   const { isSearchInProgress, searchResults } = store;
 
   if (isSearchInProgress) return <Spinner />;
 
   return (
-    <SearchResultsList
-      parcelSearchResults={searchResults}
-      onSelectParcel={onSelectParcel}
-    />
+    <SearchResultsList parcelSearchResults={searchResults} />
   );
 };
 
 /**
  * Distance search form
- * @param {DistanceSearchProps} props
+ * @param {Object} props
+ * @param {Store} props.store
  */
-const DistanceSearch = ({ store, onSelectParcel, parcel }) => {
+const DistanceSearch = ({ store }) => {
   const { errorMessage, search } = store;
 
   const handleSubmit = distance => {
-    search(parcel.id, distance);
+    search(distance);
   };
 
   return (
@@ -55,16 +48,11 @@ const DistanceSearch = ({ store, onSelectParcel, parcel }) => {
       {errorMessage ? (
         <Text>{errorMessage}</Text>
       ) : (
-        <SearchResults
-          onSelectParcel={onSelectParcel}
-          store={store}
-        />
+        <SearchResults store={store} />
       )}
     </div>
   );
 };
-
-/** @typedef {import('api').Parcel} Parcel */
 
 /**
  * Form to search for all parcels within a specified radius surrounding the selected address and
@@ -72,40 +60,31 @@ const DistanceSearch = ({ store, onSelectParcel, parcel }) => {
  * @param {Object} props
  * @param {function(): void} props.onCancelButtonClick - Callback that gets called when the user
  *     clicks the cancel button
- * @param {function(Parcel): void} props.onNotifyButtonClick - Callback that receives the edited
+ * @param {function(): void} props.onNotifyButtonClick - Callback that receives the edited
  *     parcel when the user clicks the "Notify" button
- * @property {function(Parcel): void} onSelectParcel - Callback to handle when the user
- *     selects a parcel from the map or search results
- * @param {Parcel} parcel - The parcel to be edited
- * @property {Store} store
+ * @param {Store} props.distanceSearchStore
  */
 const NotifyForm = props => {
   const {
     onCancelButtonClick,
     onNotifyButtonClick,
-    onSelectParcel,
-    parcel,
-    store,
+    distanceSearchStore,
   } = props;
 
   /** <form> onSubmit handler */
   const handleFormSubmit = event => {
     event.preventDefault(); // Prevent the browser from refreshing
-    onNotifyButtonClick(parcel);
+    onNotifyButtonClick();
   };
 
   /** "Notify" button's onClick handler */
   const handleNotifyButtonClick = () => {
-    onNotifyButtonClick(parcel);
+    onNotifyButtonClick();
   };
 
   return (
     <div>
-      <DistanceSearch
-        store={store}
-        onSelectParcel={onSelectParcel}
-        parcel={parcel}
-      />
+      <DistanceSearch store={distanceSearchStore} />
       <Form onSubmit={handleFormSubmit}>
         <ActionGroup className={styles.actionGroup}>
           <Button
