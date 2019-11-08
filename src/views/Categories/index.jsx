@@ -11,11 +11,16 @@ import {
 import AddressSearch from 'components/AddressSearch';
 import ParcelMap from 'components/ParcelMap';
 import useAddressSearchStore from 'components/AddressSearch/useAddressSearchStore';
+import useViewCardStyles from 'hooks/useViewCardStyles';
 import EditForm from './components/EditForm';
 import styles from './index.module.css';
 
 /** @typedef {import('api').ParcelCoords} ParcelCoords */
 /** @typedef {import('components/ParcelMap/CrunchyMap').ParcelFromMap} ParcelFromMap */
+
+// IDs for dynamically resizing the card
+const VIEW_CONTAINER_ID = 'categoriesView';
+const CARD_BODY_ID = 'categoriesCardBody';
 
 /** @type {ParcelFromMap | null} */
 const parcelFromMapInitialState = null;
@@ -60,23 +65,22 @@ const Categories = () => {
     resetView();
   };
 
-  const expandedContent = Boolean(
-    addressSearchStore.searchResult
-    || addressSearchStore.isLoading
-    || parcelFromMap,
-  );
-
-  const classes = expandedContent ? `${styles.card} ${styles.expanded}` : `${styles.card}`;
+  // Generate the `style` object for the floating card
+  const cardStyle = useViewCardStyles(VIEW_CONTAINER_ID, CARD_BODY_ID);
 
   return (
-    <PageSection variant={PageSectionVariants.light} className={styles.pageSection}>
+    <PageSection
+      id={VIEW_CONTAINER_ID}
+      variant={PageSectionVariants.light}
+      className={styles.pageSection}
+    >
       <ParcelMap
         parcelCoords={addressSearchStore.searchResult}
         onParcelClick={setParcelFromMap}
       />
 
-      <Card className={classes}>
-        <CardBody>
+      <Card className={styles.card} style={cardStyle}>
+        <CardBody id={CARD_BODY_ID}>
           <AddressSearch store={addressSearchStore} />
           {parcelFromMap && <ParcelDetails parcelFromMap={parcelFromMap} />}
           {
