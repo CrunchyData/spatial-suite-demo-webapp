@@ -13,7 +13,7 @@ const SearchResultsList = ({ parcelSearchResults }) => (
   <List className={styles.list}>
     {parcelSearchResults.map((parcel, idx) => (
       <ListItem key={idx}>
-        {parcel.address}
+        {parcel.address || `PARCEL ID: ${parcel.parcelid}`}
       </ListItem>
     ))}
   </List>
