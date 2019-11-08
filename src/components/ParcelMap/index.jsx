@@ -66,7 +66,8 @@ const ParcelMap = ({ surroundingParcels, onParcelClick = noop, parcelCoords }) =
     () => {
       const mapInstance = refMapInstance.current;
       if (parcelCoords && mapInstance) {
-        // TODO: highlight and center the parcel
+        const { lat, lon, parcelid } = parcelCoords;
+        mapInstance.highlightParcelGeo(parcelid, [lon, lat]);
       }
     },
     [parcelCoords], // Update the map when these props change
