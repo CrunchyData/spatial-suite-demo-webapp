@@ -28,9 +28,6 @@ import styles from './index.module.scss';
 
 const ParcelMap = ({ highlightParcels, onParcelClick = noop, parcelCoords }) => {
   const refMapContainer = useRef(null);
-  const refPopupCloser = useRef(null);
-  const refPopupContainer = useRef(null);
-  const refPopupContent = useRef(null);
 
   // In case we need to access the Map instance at some point
   /** @type {React.MutableRefObject<CrunchyMapInstance | null>} MapInstanceRef */
@@ -43,20 +40,11 @@ const ParcelMap = ({ highlightParcels, onParcelClick = noop, parcelCoords }) => 
 
   useLayoutEffect(
     () => {
-      // Make sure all refs have been assigned elements before attempting instantiate the map
-      const areAllRefsAssigned = [
-        refMapContainer,
-        refPopupCloser,
-        refPopupContainer,
-        refPopupContent,
-      ].every(ref => ref.current);
+      const hasMapContainer = Boolean(refMapContainer.current);
 
-      if (areAllRefsAssigned) {
+      if (hasMapContainer) {
         refMapInstance.current = CrunchyMap({
           mapContainer: refMapContainer.current,
-          popupCloser: refPopupCloser.current,
-          popupContainer: refPopupContainer.current,
-          popupContent: refPopupContent.current,
           onParcelClick: handleParcelClick,
         });
       }
@@ -87,18 +75,7 @@ const ParcelMap = ({ highlightParcels, onParcelClick = noop, parcelCoords }) => 
   );
 
   return (
-    <>
-      <div ref={refMapContainer} className={styles.container} />
-      <div ref={refPopupContainer} className={styles.popup}>
-        <button
-          type="button"
-          className={styles.popupCloser}
-          ref={refPopupCloser}
-          aria-label="close popup"
-        />
-        <div ref={refPopupContent} />
-      </div>
-    </>
+    <div ref={refMapContainer} className={styles.container} />
   );
 };
 

@@ -2,7 +2,6 @@ import { fromLonLat } from 'ol/proj';
 import Map from 'ol/Map';
 import MVT from 'ol/format/MVT';
 import stylefunction from 'ol-mapbox-style/stylefunction';
-import Overlay from 'ol/Overlay';
 import VectorTileLayer from 'ol/layer/VectorTile';
 import VectorTileSource from 'ol/source/VectorTile';
 import VectorLayer from 'ol/layer/Vector';
@@ -44,35 +43,19 @@ const URL = {
 /**
  * @param {Object} props
  * @param {HTMLDivElement} props.mapContainer
- * @param {HTMLButtonElement} props.popupCloser
- * @param {HTMLDivElement} props.popupContainer
- * @param {HTMLDivElement} props.popupContent
  * @param {ParcelClickHandler} [props.onParcelClick]
  */
 export default function CrunchyMap(props) {
   const {
     mapContainer,
-    popupCloser,
-    popupContainer,
-    popupContent,
     onParcelClick = noop,
   } = props;
 
   /** lookup for highlighted objects  - number value of id */
   let highlightID = null;
 
-  /** layer for popups */
-  const overlay = new Overlay({
-    element: popupContainer,
-    autoPan: true,
-    autoPanAnimation: {
-      duration: 250,
-    },
-  });
-
   const map = new Map({
     target: mapContainer,
-    overlays: [overlay],
     view: new View({
       center: fromLonLat(MAP_CENTER),
       zoom: MAP_ZOOM,
@@ -138,7 +121,6 @@ export default function CrunchyMap(props) {
     const feature = features ? features[0] : null;
 
     if (!feature || feature.get('layer') !== 'parcels') {
-      closePopup();
       return;
     }
 
@@ -155,7 +137,6 @@ export default function CrunchyMap(props) {
       isFireHazard,
     };
 
-    showParcelPopup( evt.coordinate, parcel );
     onParcelClick(parcel);
   });
 
@@ -173,36 +154,6 @@ export default function CrunchyMap(props) {
     }
     // force redraw of layer style
     layerData.setStyle(layerData.getStyle());
-  }
-
-  // ==================================================
-  // Popup
-  // see https://openlayers.org/en/latest/examples/popup.html
-  // ==================================================
-
-  /**
-   * Add a click handler to hide the popup.
-   * @return {boolean} Don't follow the href.
-   */
-  popupCloser.onclick = () => {
-    closePopup();
-    highlightParcel();
-    return false;
-  };
-
-  /**
-   * @param {MapBrowserEvent} evt
-   * @param {Parcel} parcel
-   */
-  function showParcelPopup(coordinate, parcel) {
-    const { id, apn } = parcel;
-    popupContent.innerHTML = `<p><b>Parcel ${id}</b></p> <p>APN: ${apn}</p>`;
-    overlay.setPosition(coordinate);
-  }
-  function closePopup()
-  {
-    overlay.setPosition(undefined);
-    popupCloser.blur();
   }
 
   /**
