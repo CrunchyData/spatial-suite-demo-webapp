@@ -85,6 +85,8 @@ const Categories = () => {
               <EditForm
                 onCancelButtonClick={handleCancelButtonClick}
                 onSaveButtonClick={handleSaveButtonClick}
+                isFireHazard={parcelFromMap.isFireHazard}
+                parcelId={parcelFromMap.id}
               />
             ) : <ChooseParcelText />
           }

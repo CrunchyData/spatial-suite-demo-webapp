@@ -23,6 +23,12 @@
  * @property {number} parcelid
  */
 
+/**
+ * @typedef {Object} FireHazardStatus
+ * @property {string} firehazard
+ * @property {number} parcelid
+ */
+
 const urlBase = process.env.NODE_ENV === 'production'
   ? 'http://rest-services-scfire.openshift-pousty-apps.gce-containers.crunchydata.com'
   : '';
@@ -53,6 +59,32 @@ const api = {
     async getSurroundingParcels(parcelId, distance) {
       const url = `${urlBase}/notify/parcel-and-distance?parcelid=${parcelId}&dist=${distance}`;
       const response = await fetch(url);
+      const json = await response.json();
+      return json;
+    },
+    /**
+     * Sends an API request to get the firehazard status
+     * @param {number | string} parcelId
+     * @returns {Promise<FireHazardStatus>}
+     */
+    async getFireHazardStatus(parcelId) {
+      const url = `${urlBase}/parcel/firehazard/${parcelId}`;
+      const response = await fetch(url);
+      const json = await response.json();
+      return json.firehazard;
+    },
+    /**
+     * Sends an API request to set the firehazard status before returning the updated value
+     * @param {string} fireHazardStatus
+     * @param {number | string} parcelId
+     * @returns {Promise<FireHazardStatus>}
+     */
+    async setFireHazardStatus(fireHazardStatus, parcelId) {
+      const url = `${urlBase}/parcel/firehazard/${parcelId}`;
+      const response = await fetch(url, {
+        method: 'PUT',
+        firehazard: fireHazardStatus,
+      });
       const json = await response.json();
       return json;
     },

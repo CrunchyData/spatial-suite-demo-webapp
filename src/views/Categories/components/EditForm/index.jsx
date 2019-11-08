@@ -8,6 +8,7 @@ import {
   FormSelect,
   FormSelectOption,
 } from '@patternfly/react-core';
+import useFireHazardStore from './useFireHazardStore';
 import styles from './index.module.scss';
 
 /**
@@ -17,12 +18,18 @@ import styles from './index.module.scss';
  *     clicks the cancel button
  * @param {function(Parcel): void} props.onSaveButtonClick - Callback that receives the edited
  *     parcel when the user clicks the "save" button
+ * @param {string} isFireHazard
+ * @param {number | string} parcelId
  */
 const EditForm = props => {
   const {
     onCancelButtonClick,
     onSaveButtonClick,
+    isFireHazard,
+    parcelId,
   } = props;
+
+  const fireHazardStore = useFireHazardStore(isFireHazard, parcelId);
 
   /** <form> onSubmit handler */
   const handleFormSubmit = event => {
@@ -35,6 +42,10 @@ const EditForm = props => {
     onSaveButtonClick();
   };
 
+  const handleFireHazardChange = () => {
+    fireHazardStore.submit();
+  };
+
   return (
     <Form onSubmit={handleFormSubmit}>
       <FormGroup
@@ -44,6 +55,8 @@ const EditForm = props => {
       >
         <FormSelect
           id="fire-hazard"
+          value={isFireHazard ? 'yes' : 'no'}
+          onChange={handleFireHazardChange}
           aria-label="Is this parcel a fire hazard?"
         >
           <FormSelectOption value="yes" label="Yes" />
