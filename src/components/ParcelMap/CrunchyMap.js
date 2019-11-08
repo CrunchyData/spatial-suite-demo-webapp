@@ -157,6 +157,13 @@ export default function CrunchyMap(props) {
     layerData.setStyle(layerData.getStyle());
   }
 
+  /** Highlights a parcel from geo coordinates */
+  function highlightParcelGeo(id, coords) {
+    // convert geo coords to Web Mercator
+    const wmCoords = fromLonLat(coords);
+    highlightParcel(id, wmCoords);
+  }
+
   /**
    * Highlights selected parcels
    * @param {Array<SurroundingParcel>} [parcels] - Array of parcels
@@ -169,6 +176,7 @@ export default function CrunchyMap(props) {
 
   return {
     olMap: map,
+    highlightParcelGeo,
     selectParcels,
   };
 }
