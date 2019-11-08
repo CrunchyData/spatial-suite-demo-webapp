@@ -80,6 +80,7 @@ const Notifier = () => {
       <ParcelMap
         parcelCoords={addressSearchStore.searchResult}
         onParcelClick={setParcelFromMap}
+        surroundingParcels={distanceSearchStore.searchResults}
       />
 
       <Card className={classes}>

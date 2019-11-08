@@ -21,12 +21,12 @@ import styles from './index.module.scss';
 /**
  * OpenLayers map component
  * @param {Object} props
- * @param {Array<SurroundingParcel>} [props.highlightParcels]
+ * @param {Array<SurroundingParcel>} [props.surroundingParcels]
  * @param {ParcelClickHandler} [props.onParcelClick]
  * @param {ParcelCoords | null} [props.parcelCoords]
  */
 
-const ParcelMap = ({ highlightParcels, onParcelClick = noop, parcelCoords }) => {
+const ParcelMap = ({ surroundingParcels, onParcelClick = noop, parcelCoords }) => {
   const refMapContainer = useRef(null);
 
   // In case we need to access the Map instance at some point
@@ -56,11 +56,11 @@ const ParcelMap = ({ highlightParcels, onParcelClick = noop, parcelCoords }) => 
   useEffect(
     () => {
       const mapInstance = refMapInstance.current;
-      if (highlightParcels && mapInstance) {
-        refMapInstance.current.highlightParcels(highlightParcels);
+      if (surroundingParcels && mapInstance) {
+        refMapInstance.current.highlightParcels(surroundingParcels);
       }
     },
-    [highlightParcels],
+    [surroundingParcels],
   );
 
   // When the `parcelCoords` prop changes, update the map
