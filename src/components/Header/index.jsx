@@ -21,8 +21,8 @@ const Header = ({ currentViewId, onNavSelect }) => {
     <Nav onSelect={onNavSelect}>
       <NavList variant={NavVariants.horizontal}>
         <HeaderNavItem viewId="welcome">Welcome</HeaderNavItem>
-        <HeaderNavItem viewId="categories">Categories</HeaderNavItem>
-        <HeaderNavItem viewId="notifier">Notifier</HeaderNavItem>
+        <HeaderNavItem viewId="categories">Fire Hazard Classification</HeaderNavItem>
+        <HeaderNavItem viewId="notifier">Active Fire Notification</HeaderNavItem>
       </NavList>
     </Nav>
   );
