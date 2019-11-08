@@ -14,10 +14,11 @@ import useAddressSearchStore from 'components/AddressSearch/useAddressSearchStor
 import EditForm from './components/EditForm';
 import styles from './index.module.css';
 
-/** @typedef {import('api').Parcel} Parcel */
+/** @typedef {import('api').ParcelCoords} ParcelCoords */
+/** @typedef {import('components/ParcelMap/CrunchyMap').ParcelFromMap} ParcelFromMap */
 
-/** @type {Parcel | null} */
-const selectedParcelInitialState = null;
+/** @type {ParcelFromMap | null} */
+const parcelFromMapInitialState = null;
 
 const ChooseParcelText = () => (
   <TextContent>
@@ -25,58 +26,67 @@ const ChooseParcelText = () => (
   </TextContent>
 );
 
-const Categories = () => {
-  const [selectedParcel, setSelectedParcel] = useState(selectedParcelInitialState);
+/**
+ * Displays parcel details
+ * @param {Object} props
+ * @param {ParcelFromMap} props.parcelFromMap
+ */
+const ParcelDetails = ({ parcelFromMap }) => {
+  const { apn, id, isFireHazard } = parcelFromMap;
 
+  return (
+    <TextContent>
+      <Text>ID: {id}</Text>
+      <Text>APN: {apn}</Text>
+      <Text>Fire hazard: {isFireHazard ? 'Yes' : 'No'}</Text>
+    </TextContent>
+  );
+};
+
+const Categories = () => {
+  const [parcelFromMap, setParcelFromMap] = useState(parcelFromMapInitialState);
   const addressSearchStore = useAddressSearchStore();
 
-  const handleCancelButtonClick = () => {
-    // Deselect the parcel and clear search results
-    setSelectedParcel(selectedParcelInitialState);
+  const resetView = () => {
+    setParcelFromMap(parcelFromMapInitialState);
     addressSearchStore.clearSearchResult();
   };
 
-  const handleSaveButtonClick = parcel => {
+  const handleCancelButtonClick = resetView;
+
+  const handleSaveButtonClick = () => {
     // TODO: Send parcel updates to backend
     // Send parcel updates and clear search results
-    setSelectedParcel(parcel);
-    addressSearchStore.clearSearchResult();
-  };
-
-  const handleSelectParcelSearchResult = parcel => {
-    // Set selected parcel and clear search results
-    setSelectedParcel(parcel);
-    addressSearchStore.clearSearchResult();
+    resetView();
   };
 
   const expandedContent = Boolean(
-    selectedParcel
+    addressSearchStore.searchResult
     || addressSearchStore.isLoading
-    || addressSearchStore.searchResult,
+    || parcelFromMap,
   );
 
   const classes = expandedContent ? `${styles.card} ${styles.expanded}` : `${styles.card}`;
 
   return (
     <PageSection variant={PageSectionVariants.light} className={styles.pageSection}>
-      <ParcelMap onParcelClick={setSelectedParcel} />
+      <ParcelMap
+        parcelCoords={addressSearchStore.searchResult}
+        onParcelClick={setParcelFromMap}
+      />
 
       <Card className={classes}>
         <CardBody>
-          <AddressSearch
-            store={addressSearchStore}
-            onSelectParcel={handleSelectParcelSearchResult}
-          />
+          <AddressSearch store={addressSearchStore} />
+          {parcelFromMap && <ParcelDetails parcelFromMap={parcelFromMap} />}
           {
-          selectedParcel
+          (parcelFromMap || addressSearchStore.searchResult)
             ? (
               <EditForm
                 onCancelButtonClick={handleCancelButtonClick}
                 onSaveButtonClick={handleSaveButtonClick}
-                parcel={selectedParcel}
               />
-            )
-            : <ChooseParcelText />
+            ) : <ChooseParcelText />
           }
         </CardBody>
       </Card>
