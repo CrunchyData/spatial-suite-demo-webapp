@@ -16,6 +16,13 @@
   * @property {string} parcelid
   */
 
+/**
+ * @typedef {Object} ParcelCoords
+ * @property {number} lat
+ * @property {number} lon
+ * @property {number} parcelid
+ */
+
 const urlBase = process.env.NODE_ENV === 'production'
   ? 'http://rest-services-scfire.openshift-pousty-apps.gce-containers.crunchydata.com'
   : '';
@@ -25,34 +32,22 @@ const api = {
   parcels: {
     /**
      * Simulates an API request to search parcels by address
-     * @param {string} queryText
-     * @returns {Promise<Array<Parcel>>}
+     * @param {string} address
+     * @returns {Promise<ParcelCoords>}
      */
-    async search(queryText) { // eslint-disable-line no-unused-vars
-      // Simulate an API request delay
-      await new Promise(resolve => {
-        setTimeout(resolve, 500);
-      });
+    async getParcelCoords(address) {
+      const
+        addressEncoded = encodeURI(address),
+        url = `${urlBase}/geocode/${addressEncoded}`;
 
-      const response = Array(4).fill(null)
-        .map((_, idx) => {
-          // ID will never be 0
-          const id = idx + 1;
-
-          return {
-            id,
-            apn: (1000 + id).toString(10),
-            address: `10${id} Example St.`,
-            isFireHazard: Math.random() >= 0.5,
-          };
-        });
-
-      return response;
+      const response = await fetch(url);
+      const json = await response.json();
+      return json;
     },
     /**
      * Sends an API request to search parcels by distance
-     * @param {number} parcelId
-     * @param {number} distance
+     * @param {number | string} parcelId
+     * @param {number | string} distance
      * @returns {Promise<Array<SurroundingParcel>>}
      */
     async getSurroundingParcels(parcelId, distance) {

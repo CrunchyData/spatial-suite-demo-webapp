@@ -1,26 +1,28 @@
 // @ts-check
 import { useMemo } from 'react';
 import api from 'api';
-import useSetState from '../../../hooks/useSetState';
+import useSetState from 'hooks/useSetState';
 
-/** @typedef {import('api').Parcel} Parcel */
+/** @typedef {import('api').SurroundingParcel} SurroundingParcel */
 
 const initialState = {
   errorMessage: '',
   isSearchInProgress: false,
 
-  /** @type {Array<Parcel>} */
+  /** @type {Array<SurroundingParcel>} */
   searchResults: [],
 };
 
-export default function useDistanceSearchStore() {
+/** @param {number | string} parcelId */
+export default function useDistanceSearchStore(parcelId) {
   const [state, setState] = useSetState(initialState);
 
   const actions = useMemo(
     () => {
-      /** @param {number} parcelId */
       /** @param {number} distance */
-      async function search(parcelId, distance) {
+      async function search(distance) {
+        if (!parcelId) return;
+
         setState({
           errorMessage: '',
           isSearchInProgress: true,
@@ -48,9 +50,12 @@ export default function useDistanceSearchStore() {
         setState({ searchResults: [] });
       }
 
-      return { search, clearSearchResults };
+      return {
+        clearSearchResults,
+        search,
+      };
     },
-    [setState],
+    [parcelId, setState],
   );
 
   const store = useMemo(

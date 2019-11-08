@@ -1,3 +1,4 @@
+// @ts-check
 import React, { useState } from 'react';
 import {
   Card,
@@ -14,10 +15,11 @@ import useDistanceSearchStore from './components/useDistanceSearchStore';
 import NotifyForm from './components/NotifyForm';
 import styles from './index.module.css';
 
-/** @typedef {import('api').Parcel} Parcel */
+/** @typedef {import('api').ParcelCoords} ParcelCoords */
+/** @typedef {import('components/ParcelMap/CrunchyMap').ParcelFromMap} ParcelFromMap */
 
-/** @type {Parcel | null} */
-const selectedParcelInitialState = null;
+/** @type {ParcelFromMap | null} */
+const parcelFromMapInitialState = null;
 
 const ChooseParcelText = () => (
   <TextContent>
@@ -25,57 +27,72 @@ const ChooseParcelText = () => (
   </TextContent>
 );
 
-const Notifier = () => {
-  const [selectedParcel, setSelectedParcel] = useState(selectedParcelInitialState);
-  const addressSearchStore = useAddressSearchStore();
-  const distanceSearchStore = useDistanceSearchStore();
+/**
+ * Displays parcel details
+ * @param {Object} props
+ * @param {ParcelFromMap} props.parcelFromMap
+ */
+const ParcelDetails = ({ parcelFromMap }) => {
+  const { apn, id, isFireHazard } = parcelFromMap;
 
-  const handleCancelButtonClick = () => {
-    // Deselect the parcel and clear search results
-    setSelectedParcel(selectedParcelInitialState);
-    addressSearchStore.clearSearchResults();
+  return (
+    <TextContent>
+      <Text>ID: {id}</Text>
+      <Text>APN: {apn}</Text>
+      <Text>Fire hazard: {isFireHazard ? 'Yes' : 'No'}</Text>
+    </TextContent>
+  );
+};
+
+const Notifier = () => {
+  const [parcelFromMap, setParcelFromMap] = useState(parcelFromMapInitialState);
+  const addressSearchStore = useAddressSearchStore();
+  const parcelId = (
+    (addressSearchStore.searchResult && addressSearchStore.searchResult.parcelid)
+    || (parcelFromMap && parcelFromMap.id)
+  );
+  const distanceSearchStore = useDistanceSearchStore(parcelId);
+
+  const resetView = () => {
+    setParcelFromMap(parcelFromMapInitialState);
+    addressSearchStore.clearSearchResult();
+    distanceSearchStore.clearSearchResults();
   };
 
-  const handleNotifyButtonClick = parcel => {
+  const handleCancelButtonClick = resetView;
+
+  const handleNotifyButtonClick = () => {
     // TODO: Send notification about selected parcels to backend
     // Send a notification about selected parcel and clear search results
-    setSelectedParcel(parcel);
-    addressSearchStore.clearSearchResults();
-  };
-
-  const handleSelectParcelSearchResult = parcel => {
-    // Set selected parcel and clear search results
-    setSelectedParcel(parcel);
-    addressSearchStore.clearSearchResults();
+    resetView();
   };
 
   const expandedContent = Boolean(
-    selectedParcel
-    || addressSearchStore.isSearchInProgress
-    || addressSearchStore.searchResults.length,
+    addressSearchStore.searchResult
+    || addressSearchStore.isLoading
+    || parcelFromMap,
   );
 
   const classes = expandedContent ? `${styles.card} ${styles.expanded}` : `${styles.card}`;
 
   return (
     <PageSection variant={PageSectionVariants.light} className={styles.pageSection}>
-      <ParcelMap onParcelClick={setSelectedParcel} />
+      <ParcelMap
+        parcelCoords={addressSearchStore.searchResult}
+        onParcelClick={setParcelFromMap}
+      />
 
       <Card className={classes}>
         <CardBody>
-          <AddressSearch
-            store={addressSearchStore}
-            onSelectParcel={handleSelectParcelSearchResult}
-          />
+          <AddressSearch store={addressSearchStore} />
+          {parcelFromMap && <ParcelDetails parcelFromMap={parcelFromMap} />}
           {
-          selectedParcel
+          (parcelFromMap || addressSearchStore.searchResult)
             ? (
               <NotifyForm
-                store={distanceSearchStore}
-                onSelectParcel={handleSelectParcelSearchResult}
+                distanceSearchStore={distanceSearchStore}
                 onCancelButtonClick={handleCancelButtonClick}
                 onNotifyButtonClick={handleNotifyButtonClick}
-                parcel={selectedParcel}
               />
             )
             : <ChooseParcelText />
