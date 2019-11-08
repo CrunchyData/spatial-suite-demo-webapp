@@ -104,7 +104,7 @@ export default function CrunchyMap(props) {
   map.addLayer(layerData);
   map.addLayer(layerSelect);
 
-  highlightParcels();
+  selectParcels();
 
   function dataStyle(feature) {
     if (isHighlighted(feature.id_)) {
@@ -161,7 +161,7 @@ export default function CrunchyMap(props) {
    * Highlights selected parcels
    * @param {Array<SurroundingParcel>} [parcels] - Array of parcels
    */
-  function highlightParcels(parcels = []) {
+  function selectParcels(parcels = []) {
     let features = parseParcelFeatures( parcels );
     layerSetFeatures( layerSelect, features );
     zoomToExtent( map, featuresExtent( features ));
@@ -169,7 +169,7 @@ export default function CrunchyMap(props) {
 
   return {
     olMap: map,
-    highlightParcels,
+    selectParcels,
   };
 }
 
