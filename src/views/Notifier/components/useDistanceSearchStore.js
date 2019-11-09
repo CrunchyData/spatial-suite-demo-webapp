@@ -1,5 +1,5 @@
 // @ts-check
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import api from 'api';
 import useSetState from 'hooks/useSetState';
 
@@ -17,53 +17,51 @@ const initialState = {
 export default function useDistanceSearchStore(parcelId) {
   const [state, setState] = useSetState(initialState);
 
-  const actions = useMemo(
-    () => {
-      /** @param {number | string} distance */
-      async function search(distance) {
-        if (!parcelId) return;
+  const search = useCallback(
+    /** @param {number | string} distance */
+    async distance => {
+      if (!parcelId) return;
 
+      setState({
+        errorMessage: '',
+        isSearchInProgress: true,
+        searchResults: [],
+      });
+
+      try {
+        const searchResults = await api.parcels.getSurroundingParcels(parcelId, distance);
+
+        // Store results in state
         setState({
-          errorMessage: '',
-          isSearchInProgress: true,
-          searchResults: [],
+          isSearchInProgress: false,
+          searchResults,
         });
-
-        try {
-          const searchResults = await api.parcels.getSurroundingParcels(parcelId, distance);
-
-          // Store results in state
-          setState({
-            isSearchInProgress: false,
-            searchResults,
-          });
-        } catch {
-          // Request was unsuccessful
-          setState({
-            isSearchInProgress: false,
-            errorMessage: 'An error occurred',
-          });
-        }
+      } catch {
+        // Request was unsuccessful
+        setState({
+          isSearchInProgress: false,
+          errorMessage: 'An error occurred',
+        });
       }
-
-      function clearSearchResults() {
-        setState({ searchResults: [] });
-      }
-
-      return {
-        clearSearchResults,
-        search,
-      };
     },
     [parcelId, setState],
   );
 
+  const clearSearchResults = useCallback(
+    () => { setState({ searchResults: [] }); },
+    [setState],
+  );
+
+
   const store = useMemo(
     () => ({
       ...state,
-      ...actions,
+
+      // Actions
+      clearSearchResults,
+      search,
     }),
-    [actions, state],
+    [clearSearchResults, search, state],
   );
 
   return store;
