@@ -127,18 +127,6 @@ export default function CrunchyMap(props) {
 
     const featid = feature.getId();
     highlightParcel( featid, evt.coordinate );
-
-    const parcelId = feature.getId().toString();
-    const isFireHazard = feature.get(ATTR_FIREHAZ) === 'Yes';
-
-    /** @type {ParcelFromMap} */
-    const parcel = {
-      id: parcelId,
-      apn: feature.get(ATTR_APN),
-      isFireHazard,
-    };
-
-    onParcelClick(parcel);
   });
 
   function isHighlighted(id) {
@@ -152,6 +140,16 @@ export default function CrunchyMap(props) {
     highlightID = id || null;
     if (coordinate) {
       map.getView().setCenter( coordinate );
+
+      map.once('rendercomplete', () => {
+        const pixel = map.getPixelFromCoordinate(coordinate);
+        const features = map.getFeaturesAtPixel(pixel);
+        const feature = features && features[0];
+        if (feature && feature.get('layer') === 'parcels') {
+          const parcel = parcelFromFeature(feature);
+          onParcelClick(parcel);
+        }
+      })
     }
     // force redraw of layer style
     layerData.setStyle(layerData.getStyle());
@@ -275,6 +273,19 @@ function parseParcelFeatures( data ) {
         });
       return feat;
   } );
+}
+
+/**
+ * Creates a parcel object from an OpenLayers feature
+ * @param {import('ol/Feature').FeatureLike} feature 
+ * @returns {ParcelFromMap}
+ */
+function parcelFromFeature(feature) {
+  const id = feature.getId().toString();
+  const apn = feature.get(ATTR_APN);
+  const isFireHazard = feature.get(ATTR_FIREHAZ) === 'Yes';
+
+  return { id, apn, isFireHazard };
 }
 
 function noop() { }
