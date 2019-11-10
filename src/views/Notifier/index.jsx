@@ -1,5 +1,5 @@
 // @ts-check
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   Card,
   CardBody,
@@ -58,11 +58,25 @@ const Notifier = () => {
   );
   const distanceSearchStore = useDistanceSearchStore(parcelId);
 
-  const resetView = () => {
+  // Sometimes references to stores can change while references to their actions stay the same.
+  // Since there are callbacks below that depend on these actions, we'll reference the actions
+  // to reduce unnecessary re-renders.
+  const clearAddressSearch = addressSearchStore.clearSearchResult;
+  const clearDistanceSearch = distanceSearchStore.clearSearchResults;
+
+  const resetView = useCallback(() => {
     setParcelFromMap(parcelFromMapInitialState);
-    addressSearchStore.clearSearchResult();
-    distanceSearchStore.clearSearchResults();
-  };
+    clearAddressSearch();
+    clearDistanceSearch();
+  }, [clearAddressSearch, clearDistanceSearch]);
+
+  const handleParcelClick = useCallback(
+    /** @param {typeof parcelFromMap} parcel */
+    parcel => {
+      resetView();
+      setParcelFromMap(parcel);
+    }, [resetView],
+  );
 
   const handleCancelButtonClick = resetView;
 
@@ -83,7 +97,7 @@ const Notifier = () => {
     >
       <ParcelMap
         parcelCoords={addressSearchStore.searchResult}
-        onParcelClick={setParcelFromMap}
+        onParcelClick={handleParcelClick}
         surroundingParcels={distanceSearchStore.searchResults}
       />
 
