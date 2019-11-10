@@ -29,19 +29,19 @@ const SearchForm = ({ onSubmit }) => {
     <Form onSubmit={handleSubmit}>
       <FormGroup
         className={styles.formGroup}
-        fieldId="mile-search"
+        fieldId="distance-search"
         label="Search parcels within a distance of how many meters?"
       >
         <InputGroup>
           <TextInput
-            id="mile-search"
+            id="distance-search"
             type="search"
             value={value}
             onChange={setValue}
             placeholder="50"
             aria-label="Search parcels within a distance of how many meters?"
           />
-          <Button variant={ButtonVariant.control} onClick={handleSubmit}>
+          <Button disabled={!value} variant={ButtonVariant.control} onClick={handleSubmit}>
             <SearchIcon />
           </Button>
         </InputGroup>

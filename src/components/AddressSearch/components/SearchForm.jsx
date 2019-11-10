@@ -32,7 +32,7 @@ const SearchForm = ({ onSubmit }) => {
           onChange={setValue}
           aria-label="Parcel search input"
         />
-        <Button variant={ButtonVariant.control} onClick={handleSubmit}>
+        <Button disabled={!value} variant={ButtonVariant.control} onClick={handleSubmit}>
           <SearchIcon />
         </Button>
       </InputGroup>
