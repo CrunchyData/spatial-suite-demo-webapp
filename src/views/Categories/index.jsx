@@ -60,8 +60,6 @@ const Categories = () => {
   const handleCancelButtonClick = resetView;
 
   const handleSaveButtonClick = () => {
-    // TODO: Send parcel updates to backend
-    // Send parcel updates and clear search results
     resetView();
   };
 
@@ -89,6 +87,7 @@ const Categories = () => {
               <EditForm
                 onCancelButtonClick={handleCancelButtonClick}
                 onSaveButtonClick={handleSaveButtonClick}
+                parcelId={parcelFromMap && parcelFromMap.id}
               />
             ) : <ChooseParcelText />
           }
