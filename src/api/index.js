@@ -56,6 +56,34 @@ const api = {
       const json = await response.json();
       return json;
     },
+    /**
+     * Sends an API request to get the firehazard status
+     * @param {number | string} parcelId
+     * @returns {Promise<boolean>}
+     */
+    async getFireHazardStatus(parcelId) {
+      const url = `${urlBase}/parcel/firehazard/${parcelId}`;
+      const response = await fetch(url);
+      const json = await response.json();
+      const isFireHazard = json.firehazard === 'Yes';
+      return isFireHazard;
+    },
+    /**
+     * Sends an API request to set the firehazard status
+     * @param {number | string} parcelId
+     * @param {boolean} isFireHazard
+     */
+    async setFireHazardStatus(parcelId, isFireHazard) {
+      const url = `${urlBase}/parcel/firehazard/${parcelId}`;
+      const body = { firehazard: isFireHazard ? 'Yes' : 'No' };
+      await fetch(url, {
+        method: 'PUT',
+        body: JSON.stringify(body),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+    },
   },
 };
 
