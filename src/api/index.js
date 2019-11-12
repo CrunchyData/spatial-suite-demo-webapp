@@ -69,7 +69,7 @@ const api = {
       return isFireHazard;
     },
     /**
-     * Sends an API request to set the firehazard status before returning the updated value
+     * Sends an API request to set the firehazard status
      * @param {number | string} parcelId
      * @param {boolean} isFireHazard
      */
