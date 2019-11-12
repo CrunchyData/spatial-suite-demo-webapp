@@ -1,6 +1,7 @@
 // @ts-check
 import React from 'react';
 import { Spinner } from '@patternfly/react-core/dist/js/experimental';
+import ErrorMessage from 'components/ErrorMessage';
 import SearchForm from './components/SearchForm';
 import styles from './index.module.scss';
 
@@ -19,7 +20,7 @@ const AddressSearch = ({ store }) => {
   return (
     <div className={styles.container}>
       <SearchForm onSubmit={search} />
-      {errorMessage}
+      <ErrorMessage>{errorMessage}</ErrorMessage>
     </div>
   );
 };

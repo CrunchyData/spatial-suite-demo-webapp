@@ -5,9 +5,9 @@ import {
   Button,
   ButtonVariant,
   Form,
-  Text,
 } from '@patternfly/react-core';
 import { Spinner } from '@patternfly/react-core/dist/js/experimental';
+import ErrorMessage from 'components/ErrorMessage';
 import SearchForm from './components/SearchForm';
 import SearchResultsList from './components/SearchResultsList';
 import styles from './index.module.scss';
@@ -41,11 +41,11 @@ const DistanceSearch = ({ store }) => {
   return (
     <div className={styles.container}>
       <SearchForm onSubmit={search} />
-      {errorMessage ? (
-        <Text>{errorMessage}</Text>
-      ) : (
-        <SearchResults store={store} />
-      )}
+      {
+        errorMessage
+          ? <ErrorMessage>{errorMessage}</ErrorMessage>
+          : <SearchResults store={store} />
+      }
     </div>
   );
 };
