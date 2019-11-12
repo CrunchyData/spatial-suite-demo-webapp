@@ -12,6 +12,6 @@
   box-shadow: 6px 6px 20px 0px rgba(0,0,0,0.5);
   height: 9rem;
   width: 24.5rem;
-  transition: height 0.75s ease-in-out;
+  transition: height 0.3s ease-in-out;
   overflow: hidden;
 }
