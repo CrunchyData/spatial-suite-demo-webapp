@@ -12,6 +12,7 @@ import AddressSearch from 'components/AddressSearch';
 import ParcelMap from 'components/ParcelMap';
 import useAddressSearchStore from 'components/AddressSearch/useAddressSearchStore';
 import useViewCardStyles from 'hooks/useViewCardStyles';
+import usePubSub from 'hooks/usePubSub';
 import EditForm from './components/EditForm';
 import styles from './index.module.css';
 
@@ -52,15 +53,20 @@ const Categories = () => {
   const [parcelFromMap, setParcelFromMap] = useState(parcelFromMapInitialState);
   const addressSearchStore = useAddressSearchStore();
 
+  // This will be used to publish events to ParcelMap
+  const pubSub = usePubSub();
+
   const resetView = () => {
     setParcelFromMap(parcelFromMapInitialState);
     addressSearchStore.clearSearchResult();
+    pubSub.publish('parcel/highlightNone');
   };
 
   const handleCancelButtonClick = resetView;
 
   const handleSaveButtonClick = () => {
     resetView();
+    pubSub.publish('parcel/hazardUpdate');
   };
 
   // Generate the `style` object for the floating card
@@ -75,6 +81,7 @@ const Categories = () => {
       <ParcelMap
         parcelCoords={addressSearchStore.searchResult}
         onParcelClick={setParcelFromMap}
+        pubSub={pubSub}
       />
 
       <Card className={styles.card} style={cardStyle}>

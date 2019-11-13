@@ -9,6 +9,7 @@ import styles from './index.module.scss';
 /** @typedef {ReturnType<typeof CrunchyMap>} CrunchyMapInstance */
 /** @typedef {import('api').ParcelCoords} ParcelCoords */
 /** @typedef {import('./CrunchyMap').ParcelFromMap} ParcelFromMap */
+/** @typedef {ReturnType<import('hooks/usePubSub')['default']>} PubSub */
 /** @typedef {import('api').SurroundingParcel} SurroundingParcel */
 
 /**
@@ -24,9 +25,17 @@ import styles from './index.module.scss';
  * @param {Array<SurroundingParcel>} [props.surroundingParcels]
  * @param {ParcelClickHandler} [props.onParcelClick]
  * @param {ParcelCoords | null} [props.parcelCoords]
+ * @param {PubSub} [props.pubSub]
  */
 
-const ParcelMap = ({ surroundingParcels, onParcelClick = noop, parcelCoords }) => {
+const ParcelMap = props => {
+  const {
+    surroundingParcels,
+    onParcelClick = noop,
+    parcelCoords,
+    pubSub,
+  } = props;
+
   const refMapContainer = useRef(null);
 
   // In case we need to access the Map instance at some point
@@ -71,6 +80,29 @@ const ParcelMap = ({ surroundingParcels, onParcelClick = noop, parcelCoords }) =
       }
     },
     [parcelCoords], // Update the map when these props change
+  );
+
+  // Refresh the map when the parcel's fire hazard status is updated
+  useLayoutEffect(
+    () => {
+      const mapInstance = refMapInstance.current;
+      if (pubSub && mapInstance) {
+        // Each pubSub.subscribe() returns an unsubscribe function, so we'll store them in an array
+        const disposers = [
+          pubSub.subscribe('parcel/hazardUpdate', mapInstance.refreshParcelLayer),
+          pubSub.subscribe('parcel/highlightNone', mapInstance.highlightNone),
+        ];
+
+        /** Runs the unsubscribe functions */
+        const unsubscribe = () => disposers.forEach(disposer => disposer());
+
+        // Return the "master" unsubscribe function.
+        // React will call it when this component unmounts.
+        return unsubscribe;
+      }
+      return undefined;
+    },
+    [pubSub],
   );
 
   return (
