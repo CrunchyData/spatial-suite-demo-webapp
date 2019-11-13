@@ -10,6 +10,7 @@ import {
 } from '@patternfly/react-core';
 import AddressSearch from 'components/AddressSearch';
 import ParcelMap from 'components/ParcelMap';
+import FormHeading from 'components/FormHeading';
 import useAddressSearchStore from 'components/AddressSearch/useAddressSearchStore';
 import useViewCardStyles from 'hooks/useViewCardStyles';
 import usePubSub from 'hooks/usePubSub';
@@ -41,10 +42,10 @@ const ParcelDetails = ({ parcelFromMap }) => {
   const { apn, id, isFireHazard } = parcelFromMap;
 
   return (
-    <TextContent>
-      <Text>ID: {id}</Text>
-      <Text>APN: {apn}</Text>
-      <Text>Fire hazard: {isFireHazard ? 'Yes' : 'No'}</Text>
+    <TextContent className={styles.parcelDetails}>
+      <Text><strong>ID:</strong> {id}</Text>
+      <Text><strong>APN:</strong> {apn}</Text>
+      <Text><strong>Fire hazard:</strong> {isFireHazard ? 'Yes' : 'No'}</Text>
     </TextContent>
   );
 };
@@ -86,6 +87,7 @@ const Classification = () => {
 
       <Card className={styles.card} style={cardStyle}>
         <CardBody id={CARD_BODY_ID}>
+          <FormHeading>Fire Hazard Classification</FormHeading>
           <AddressSearch store={addressSearchStore} />
           {parcelFromMap && <ParcelDetails parcelFromMap={parcelFromMap} />}
           {
