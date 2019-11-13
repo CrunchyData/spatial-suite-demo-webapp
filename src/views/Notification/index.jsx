@@ -7,6 +7,10 @@ import {
   PageSectionVariants,
   TextContent,
   Text,
+  ActionGroup,
+  Button,
+  ButtonVariant,
+  Form,
 } from '@patternfly/react-core';
 import AddressSearch from 'components/AddressSearch';
 import ParcelMap from 'components/ParcelMap';
@@ -14,7 +18,7 @@ import useAddressSearchStore from 'components/AddressSearch/useAddressSearchStor
 import useViewCardStyles from 'hooks/useViewCardStyles';
 import usePubSub from 'hooks/usePubSub';
 import useDistanceSearchStore from './components/useDistanceSearchStore';
-import NotificationForm from './components/NotificationForm';
+import DistanceSearch from './components/DistanceSearch';
 import NotificationAlert from './components/NotificationAlert';
 import styles from './index.module.css';
 
@@ -51,6 +55,34 @@ const ParcelDetails = ({ parcelFromMap }) => {
   );
 };
 
+const CancelButton = ({ onClick }) => (
+  <Button
+    variant={ButtonVariant.secondary}
+    onClick={onClick}
+  >
+    Cancel
+  </Button>
+);
+
+const NotifyButton = ({ onClick }) => (
+  <Button
+    variant={ButtonVariant.primary}
+    onClick={onClick}
+  >
+    Notify
+  </Button>
+);
+
+const SearchButton = ({ onClick }) => (
+  <Button
+    // TODO: make this green using PatternFly's "success" CSS color variable
+    variant={ButtonVariant.primary}
+    onClick={onClick}
+  >
+    Search
+  </Button>
+);
+
 const Notification = () => {
   const [parcelFromMap, setParcelFromMap] = useState(parcelFromMapInitialState);
   const addressSearchStore = useAddressSearchStore();
@@ -68,13 +100,14 @@ const Notification = () => {
   // to reduce unnecessary re-renders.
   const clearAddressSearch = addressSearchStore.clearSearchResult;
   const clearDistanceSearch = distanceSearchStore.clearSearchResults;
+  const { setDistance } = distanceSearchStore;
 
   const resetView = useCallback(() => {
     setParcelFromMap(parcelFromMapInitialState);
     clearAddressSearch();
     clearDistanceSearch();
-    pubSub.publish('parcel/highlightNone');
-  }, [clearAddressSearch, clearDistanceSearch, pubSub]);
+    setDistance('');
+  }, [clearAddressSearch, clearDistanceSearch, setDistance]);
 
   const handleParcelClick = useCallback(
     /** @param {typeof parcelFromMap} parcel */
@@ -92,6 +125,7 @@ const Notification = () => {
 
   const handleCancelButtonClick = () => {
     resetView();
+    pubSub.publish('parcel/highlightNone');
   };
 
   const handleNotifyButtonClick = event => {
@@ -132,11 +166,18 @@ const Notification = () => {
           {
           (parcelFromMap || addressSearchStore.searchResult)
             ? (
-              <NotificationForm
-                distanceSearchStore={distanceSearchStore}
-                onCancelButtonClick={handleCancelButtonClick}
-                onNotifyButtonClick={handleNotifyButtonClick}
-              />
+              /** Distance search form */
+              <Form onSubmit={distanceSearchStore.handleFormSubmit}>
+                <DistanceSearch store={distanceSearchStore} />
+                <ActionGroup>
+                  <CancelButton onClick={handleCancelButtonClick} />
+                  {
+                    distanceSearchStore.searchResults.length
+                      ? <NotifyButton onClick={handleNotifyButtonClick} />
+                      : <SearchButton onClick={distanceSearchStore.search} />
+                  }
+                </ActionGroup>
+              </Form>
             )
             : <ChooseParcelText />
           }
