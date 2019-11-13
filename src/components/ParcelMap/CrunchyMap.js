@@ -30,7 +30,7 @@ const ATTR_APN = 'apn';
 const ATTR_FIREHAZ = 'firehazard';
 const CLR = {
   selectedStroke: '#8532a8',
-  selectedFill: '#8532a830'
+  selectedFill: '#8532a830',
 };
 
 const URL_BASE_SC = 'http://sc-tileserver-gl-scfire.openshift-pousty-apps.gce-containers.crunchydata.com';
@@ -96,8 +96,8 @@ export default function CrunchyMap(props) {
   const layerSelect = new VectorLayer({
     style: createStyleSelected,
     source: new VectorSource({
-      features: []
-    })
+      features: [],
+    }),
   });
 
   map.addLayer(layerBase);
@@ -117,7 +117,6 @@ export default function CrunchyMap(props) {
   }
 
   map.on('singleclick', evt => {
-
     const features = map.getFeaturesAtPixel(evt.pixel);
     const feature = features ? features[0] : null;
 
@@ -126,11 +125,11 @@ export default function CrunchyMap(props) {
     }
 
     const featid = feature.getId();
-    highlightParcel( featid, evt.coordinate );
+    highlightParcel(featid, evt.coordinate);
   });
 
   function isHighlighted(id) {
-    if (! highlightID) return false;
+    if (!highlightID) return false;
     return id === highlightID;
   }
 
@@ -139,7 +138,7 @@ export default function CrunchyMap(props) {
     // add selected feature to lookup
     highlightID = id || null;
     if (coordinate) {
-      map.getView().setCenter( coordinate );
+      map.getView().setCenter(coordinate);
 
       map.once('rendercomplete', () => {
         const pixel = map.getPixelFromCoordinate(coordinate);
@@ -149,7 +148,7 @@ export default function CrunchyMap(props) {
           const parcel = parcelFromFeature(feature);
           onParcelClick(parcel);
         }
-      })
+      });
     }
     // force redraw of layer style
     layerData.setStyle(layerData.getStyle());
@@ -167,9 +166,9 @@ export default function CrunchyMap(props) {
    * @param {Array<SurroundingParcel>} [parcels] - Array of parcels
    */
   function selectParcels(parcels = []) {
-    let features = parseParcelFeatures( parcels );
-    layerSetFeatures( layerSelect, features );
-    zoomToExtent( map, featuresExtent( features ));
+    const features = parseParcelFeatures(parcels);
+    layerSetFeatures(layerSelect, features);
+    zoomToExtent(map, featuresExtent(features));
   }
 
   function refreshParcelLayer() {
@@ -195,9 +194,9 @@ async function fetchGlStyle() {
 const styleSelected = new Style({
   fill: new Fill({ color: CLR.selectedFill }),
   stroke: new Stroke({
-      color: CLR.selectedStroke,
-      width: 3
-  })
+    color: CLR.selectedStroke,
+    width: 3,
+  }),
 });
 
 function createStyleSelected() {
@@ -253,39 +252,39 @@ function createStyleFire(feature) {
 const FORMAT_WKT = new WKT();
 
 function layerSetFeatures(lyr, features = []) {
-    let source = lyr.getSource();
-    source.clear();
-    source.addFeatures( features );
+  const source = lyr.getSource();
+  source.clear();
+  source.addFeatures(features);
 }
 
-function zoomToExtent( map, extent, pad = 50 ) {
-    if ( ! extent ) return;
-    map.getView().fit( extent, { padding: [ pad, pad, pad, pad ] } );
+function zoomToExtent(map, extent, pad = 50) {
+  if (!extent) return;
+  map.getView().fit(extent, { padding: [pad, pad, pad, pad] });
 }
 
-function featuresExtent( features ) {
+function featuresExtent(features) {
   let extent = null;
   features.forEach(feature => {
-      let ext = feature.getGeometry().getExtent();
-      extent = extent ? extend(ext, extent) : ext;
+    const ext = feature.getGeometry().getExtent();
+    extent = extent ? extend(ext, extent) : ext;
   });
   return extent;
 }
 
-function parseParcelFeatures( data ) {
-  return data.map( item => {
-      let wkt = item.geom;
-      let feat = FORMAT_WKT.readFeature(wkt, {
-          dataProjection: 'EPSG:4326',
-          featureProjection: 'EPSG:3857'
-        });
-      return feat;
-  } );
+function parseParcelFeatures(data) {
+  return data.map(item => {
+    const wkt = item.geom;
+    const feat = FORMAT_WKT.readFeature(wkt, {
+      dataProjection: 'EPSG:4326',
+      featureProjection: 'EPSG:3857',
+    });
+    return feat;
+  });
 }
 
 /**
  * Creates a parcel object from an OpenLayers feature
- * @param {import('ol/Feature').FeatureLike} feature 
+ * @param {import('ol/Feature').FeatureLike} feature
  * @returns {ParcelFromMap}
  */
 function parcelFromFeature(feature) {
