@@ -117,7 +117,7 @@ const Notification = () => {
       />
 
       {isAlertVisible && (
-        <NotificationAlert onClose={hideAlert}/>
+        <NotificationAlert onClose={hideAlert} />
       )}
 
       <Card className={styles.card} style={cardStyle}>
