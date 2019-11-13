@@ -73,7 +73,8 @@ const Notification = () => {
     setParcelFromMap(parcelFromMapInitialState);
     clearAddressSearch();
     clearDistanceSearch();
-  }, [clearAddressSearch, clearDistanceSearch]);
+    pubSub.publish('parcel/highlightNone');
+  }, [clearAddressSearch, clearDistanceSearch, pubSub]);
 
   const handleParcelClick = useCallback(
     /** @param {typeof parcelFromMap} parcel */
@@ -91,7 +92,6 @@ const Notification = () => {
 
   const handleCancelButtonClick = () => {
     resetView();
-    pubSub.publish('parcel/highlightNone');
   };
 
   const handleNotifyButtonClick = event => {
