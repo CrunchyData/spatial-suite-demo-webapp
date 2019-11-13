@@ -172,9 +172,17 @@ export default function CrunchyMap(props) {
     zoomToExtent( map, featuresExtent( features ));
   }
 
+  function refreshParcelLayer() {
+    layerRefresh(layerData);
+  }
+
+  function highlightNone() { highlightParcel(); }
+
   return {
     olMap: map,
+    highlightNone,
     highlightParcelGeo,
+    refreshParcelLayer,
     selectParcels,
   };
 }
@@ -286,6 +294,12 @@ function parcelFromFeature(feature) {
   const isFireHazard = feature.get(ATTR_FIREHAZ) === 'Yes';
 
   return { id, apn, isFireHazard };
+}
+
+function layerRefresh(lyr) {
+  const source = lyr.getSource();
+  source.clear();
+  source.refresh({ force: true });
 }
 
 function noop() { }

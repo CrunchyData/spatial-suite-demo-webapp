@@ -12,6 +12,7 @@ import AddressSearch from 'components/AddressSearch';
 import ParcelMap from 'components/ParcelMap';
 import useAddressSearchStore from 'components/AddressSearch/useAddressSearchStore';
 import useViewCardStyles from 'hooks/useViewCardStyles';
+import usePubSub from 'hooks/usePubSub';
 import useDistanceSearchStore from './components/useDistanceSearchStore';
 import NotifyForm from './components/NotifyForm';
 import styles from './index.module.css';
@@ -58,6 +59,9 @@ const Notifier = () => {
   );
   const distanceSearchStore = useDistanceSearchStore(parcelId);
 
+  // This will be used to publish events to ParcelMap
+  const pubSub = usePubSub();
+
   // Sometimes references to stores can change while references to their actions stay the same.
   // Since there are callbacks below that depend on these actions, we'll reference the actions
   // to reduce unnecessary re-renders.
@@ -78,7 +82,10 @@ const Notifier = () => {
     }, [resetView],
   );
 
-  const handleCancelButtonClick = resetView;
+  const handleCancelButtonClick = () => {
+    resetView();
+    pubSub.publish('parcel/highlightNone');
+  };
 
   const handleNotifyButtonClick = () => {
     // TODO: Send notification about selected parcels to backend
@@ -99,6 +106,7 @@ const Notifier = () => {
         parcelCoords={addressSearchStore.searchResult}
         onParcelClick={handleParcelClick}
         surroundingParcels={distanceSearchStore.searchResults}
+        pubSub={pubSub}
       />
 
       <Card className={styles.card} style={cardStyle}>
