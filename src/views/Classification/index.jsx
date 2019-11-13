@@ -88,8 +88,13 @@ const Classification = () => {
       <Card className={styles.card} style={cardStyle}>
         <CardBody id={CARD_BODY_ID}>
           <FormHeading>Fire Hazard Classification</FormHeading>
-          <AddressSearch store={addressSearchStore} />
-          {parcelFromMap && <ParcelDetails parcelFromMap={parcelFromMap} />}
+          {
+            // If there is a parcel selected, show the parcel details.
+            // Otherwise, show the address search form.
+            parcelFromMap
+              ? <ParcelDetails parcelFromMap={parcelFromMap} />
+              : <AddressSearch store={addressSearchStore} />
+          }
           {
           (parcelFromMap || addressSearchStore.searchResult)
             ? (
