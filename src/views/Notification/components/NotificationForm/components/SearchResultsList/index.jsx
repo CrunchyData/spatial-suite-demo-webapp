@@ -1,22 +1,63 @@
-import React from 'react';
-import { List, ListItem } from '@patternfly/react-core';
+// @ts-check
+import React, { memo } from 'react';
+import {
+  Table, TableHeader, TableBody,
+} from '@patternfly/react-table';
+import { Text, TextContent } from '@patternfly/react-core';
 import styles from './index.module.scss';
 
 /** @typedef {import('api').SurroundingParcel} SurroundingParcel */
+
+/** @typedef {React.ComponentProps<typeof Table>} TableProps */
+/** @typedef  {TableProps['cells']} TableCells */
+/** @typedef {TableProps['rows']} TableRows */
+
+const noBreak = () => ({ className: styles.noBreak });
+
+/**
+ * Definitions for table headings and column "transforms"
+ * @type {TableCells}
+ */
+const columns = [
+  {
+    title: 'ID',
+    cellTransforms: [noBreak],
+  },
+  'Address',
+  {
+    title: 'Acres',
+    cellTransforms: [noBreak],
+  },
+];
 
 /**
  * Lists search results - all parcels located within the specified distance
  * @param {Object} props
  * @param {Array<SurroundingParcel>} props.parcelSearchResults
  */
-const SearchResultsList = ({ parcelSearchResults }) => (
-  <List className={styles.list}>
-    {parcelSearchResults.map((parcel, idx) => (
-      <ListItem key={idx}>
-        {parcel.address || `PARCEL ID: ${parcel.parcelid}`}
-      </ListItem>
-    ))}
-  </List>
-);
+const SearchResultsList = ({ parcelSearchResults }) => {
+  if (!parcelSearchResults.length) return null;
 
-export default SearchResultsList;
+  /** @type {TableRows} */
+  const rows = parcelSearchResults.map(parcel => ({
+    cells: [
+      parcel.parcelid,
+      parcel.address,
+      parcel.acres,
+    ],
+  }));
+
+  return (
+    <>
+      <TextContent>
+        <Text>{rows.length} parcels found</Text>
+      </TextContent>
+      <Table className={styles.root} cells={columns} rows={rows}>
+        <TableHeader />
+        <TableBody />
+      </Table>
+    </>
+  );
+};
+
+export default memo(SearchResultsList);
