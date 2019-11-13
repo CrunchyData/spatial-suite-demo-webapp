@@ -1,17 +1,17 @@
-.formGroup {
-  label {
-    font-size: var(--pf-global--FontWeight--normal);
-    line-height: var(--pf-global--LineHeight--md);
-    margin-bottom: 0.35rem;
-  }
+.formGroup label {
+  font-size: var(--pf-global--FontWeight--normal);
+  line-height: var(--pf-global--LineHeight--md);
+  margin-bottom: 0.35rem;
 }
 
 .actionGroup {
   margin-top: 0 !important;
 }
 
-.container {
-  p {
-    margin: 1rem 0;
-  }
+.container p {
+  margin: 1rem 0;
+}
+
+.alert {
+  z-index: 2;
 }
