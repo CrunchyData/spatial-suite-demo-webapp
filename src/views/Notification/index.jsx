@@ -1,5 +1,7 @@
 // @ts-check
-import React, { useCallback, useState } from 'react';
+import React, {
+  useCallback, useEffect, useRef, useState,
+} from 'react';
 import {
   Card,
   CardBody,
@@ -120,8 +122,24 @@ const Notification = () => {
   /** Definitions setting state for the alert */
   const [isAlertVisible, setIsAlertVisible] = useState(false);
 
-  const showAlert = () => setIsAlertVisible(true);
+  const alertTimeoutIdRef = useRef();
   const hideAlert = () => setIsAlertVisible(false);
+  const showAlert = () => {
+    setIsAlertVisible(true);
+
+    // Set a timeout to hide the alert, saving the timeout ID.
+    // The timeout ID will be used to cancel the timeout when this component unmounts (i.e. the
+    // user switches to a different view).
+
+    // @ts-ignore // FIXME
+    alertTimeoutIdRef.current = setTimeout(hideAlert, 5000);
+  };
+
+  // Clear the alert timeout when this view unmounts
+  useEffect(
+    () => () => { clearTimeout(alertTimeoutIdRef.current); },
+    [],
+  );
 
   const handleCancelButtonClick = () => {
     resetView();
