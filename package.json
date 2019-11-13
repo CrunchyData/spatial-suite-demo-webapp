@@ -6,6 +6,7 @@
   "dependencies": {
     "@patternfly/react-core": "^3.112.3",
     "@patternfly/react-icons": "^3.14.12",
+    "@patternfly/react-table": "^2.24.22",
     "node-sass": "^4.12.0",
     "ol": "^6.0.1",
     "ol-mapbox-style": "^5.0.2",
