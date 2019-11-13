@@ -8,6 +8,7 @@ import useSetState from 'hooks/useSetState';
 const initialState = {
   errorMessage: '',
   isSearchInProgress: false,
+  distance: '',
 
   /** @type {Array<SurroundingParcel>} */
   searchResults: [],
@@ -19,7 +20,7 @@ export default function useDistanceSearchStore(parcelId) {
 
   const search = useCallback(
     /** @param {number | string} distance */
-    async distance => {
+    async () => {
       if (!parcelId) return;
 
       setState({
@@ -29,7 +30,7 @@ export default function useDistanceSearchStore(parcelId) {
       });
 
       try {
-        const searchResults = await api.parcels.getSurroundingParcels(parcelId, distance);
+        const searchResults = await api.parcels.getSurroundingParcels(parcelId, state.distance);
 
         // Store results in state
         setState({
@@ -44,12 +45,25 @@ export default function useDistanceSearchStore(parcelId) {
         });
       }
     },
-    [parcelId, setState],
+    [parcelId, setState, state.distance],
   );
 
   const clearSearchResults = useCallback(
     () => { setState({ searchResults: [] }); },
     [setState],
+  );
+
+  const setDistance = useCallback(
+    distance => { setState({ distance }); },
+    [setState],
+  );
+
+  const handleFormSubmit = useCallback(
+    event => {
+      event.preventDefault();
+      search();
+    },
+    [search],
   );
 
 
@@ -59,9 +73,11 @@ export default function useDistanceSearchStore(parcelId) {
 
       // Actions
       clearSearchResults,
+      handleFormSubmit,
       search,
+      setDistance,
     }),
-    [clearSearchResults, search, state],
+    [clearSearchResults, handleFormSubmit, search, setDistance, state],
   );
 
   return store;
