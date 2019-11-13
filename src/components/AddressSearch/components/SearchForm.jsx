@@ -30,7 +30,8 @@ const SearchForm = ({ onSubmit }) => {
           type="search"
           value={value}
           onChange={setValue}
-          aria-label="Parcel search input"
+          placeholder="Address search..."
+          aria-label="Search parcel addresses"
         />
         <Button disabled={!value} variant={ButtonVariant.control} onClick={handleSubmit}>
           <SearchIcon />

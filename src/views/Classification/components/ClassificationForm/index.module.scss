@@ -1,11 +1,17 @@
-.formGroup {
-  label {
-    font-size: var(--pf-global--FontWeight--normal);
-    line-height: var(--pf-global--LineHeight--md);
-    margin-bottom: 0.35rem;
-  }
+.formGroup label {
+  border-top: 1px solid gray;
+  font-size: var(--pf-global--FontWeight--normal);
+  line-height: var(--pf-global--LineHeight--md);
+  margin-top: 0.75rem;
+  margin-bottom: 0.35rem;
+  padding-top: 0.75rem;
+  width: 100%;
 }
 
 .actionGroup {
   margin-top: 0 !important;
+}
+
+.container p {
+  margin: 1rem 0;
 }
