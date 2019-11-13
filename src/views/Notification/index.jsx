@@ -14,15 +14,15 @@ import useAddressSearchStore from 'components/AddressSearch/useAddressSearchStor
 import useViewCardStyles from 'hooks/useViewCardStyles';
 import usePubSub from 'hooks/usePubSub';
 import useDistanceSearchStore from './components/useDistanceSearchStore';
-import NotifyForm from './components/NotifyForm';
+import NotificationForm from './components/NotificationForm';
 import styles from './index.module.css';
 
 /** @typedef {import('api').ParcelCoords} ParcelCoords */
 /** @typedef {import('components/ParcelMap/CrunchyMap').ParcelFromMap} ParcelFromMap */
 
 // IDs for dynamically resizing the card
-const VIEW_CONTAINER_ID = 'notifierView';
-const CARD_BODY_ID = 'notifierCardBody';
+const VIEW_CONTAINER_ID = 'notificationView';
+const CARD_BODY_ID = 'notificationCardBody';
 
 /** @type {ParcelFromMap | null} */
 const parcelFromMapInitialState = null;
@@ -50,7 +50,7 @@ const ParcelDetails = ({ parcelFromMap }) => {
   );
 };
 
-const Notifier = () => {
+const Notification = () => {
   const [parcelFromMap, setParcelFromMap] = useState(parcelFromMapInitialState);
   const addressSearchStore = useAddressSearchStore();
   const parcelId = (
@@ -121,7 +121,7 @@ const Notifier = () => {
           {
           (parcelFromMap || addressSearchStore.searchResult)
             ? (
-              <NotifyForm
+              <NotificationForm
                 distanceSearchStore={distanceSearchStore}
                 onCancelButtonClick={handleCancelButtonClick}
                 onNotifyButtonClick={handleNotifyButtonClick}
@@ -135,4 +135,4 @@ const Notifier = () => {
   );
 };
 
-export default Notifier;
+export default Notification;

@@ -60,7 +60,7 @@ const DistanceSearch = ({ store }) => {
  *     parcel when the user clicks the "Notify" button
  * @param {Store} props.distanceSearchStore
  */
-const NotifyForm = props => {
+const NotificationForm = props => {
   const {
     onCancelButtonClick,
     onNotifyButtonClick,
@@ -101,4 +101,4 @@ const NotifyForm = props => {
   );
 };
 
-export default NotifyForm;
+export default NotificationForm;

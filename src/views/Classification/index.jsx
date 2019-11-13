@@ -13,7 +13,7 @@ import ParcelMap from 'components/ParcelMap';
 import useAddressSearchStore from 'components/AddressSearch/useAddressSearchStore';
 import useViewCardStyles from 'hooks/useViewCardStyles';
 import usePubSub from 'hooks/usePubSub';
-import EditForm from './components/EditForm';
+import ClassificationForm from './components/ClassificationForm';
 import styles from './index.module.css';
 
 /** @typedef {import('api').ParcelCoords} ParcelCoords */
@@ -49,7 +49,7 @@ const ParcelDetails = ({ parcelFromMap }) => {
   );
 };
 
-const Categories = () => {
+const Classification = () => {
   const [parcelFromMap, setParcelFromMap] = useState(parcelFromMapInitialState);
   const addressSearchStore = useAddressSearchStore();
 
@@ -91,7 +91,7 @@ const Categories = () => {
           {
           (parcelFromMap || addressSearchStore.searchResult)
             ? (
-              <EditForm
+              <ClassificationForm
                 onCancelButtonClick={handleCancelButtonClick}
                 onSaveButtonClick={handleSaveButtonClick}
                 parcelId={parcelFromMap && parcelFromMap.id}
@@ -104,4 +104,4 @@ const Categories = () => {
   );
 };
 
-export default Categories;
+export default Classification;
