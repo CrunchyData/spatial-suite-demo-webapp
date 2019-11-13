@@ -1,0 +1,7 @@
+.root {
+  box-shadow: 6px 6px 20px 0px rgba(0,0,0,0.5);
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 2;
+}

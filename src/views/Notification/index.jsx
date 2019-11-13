@@ -15,6 +15,7 @@ import useViewCardStyles from 'hooks/useViewCardStyles';
 import usePubSub from 'hooks/usePubSub';
 import useDistanceSearchStore from './components/useDistanceSearchStore';
 import NotificationForm from './components/NotificationForm';
+import NotificationAlert from './components/NotificationAlert';
 import styles from './index.module.css';
 
 /** @typedef {import('api').ParcelCoords} ParcelCoords */
@@ -82,14 +83,20 @@ const Notification = () => {
     }, [resetView],
   );
 
+  /** Definitions setting state for the alert */
+  const [isAlertVisible, setIsAlertVisible] = useState(false);
+
+  const showAlert = () => setIsAlertVisible(true);
+  const hideAlert = () => setIsAlertVisible(false);
+
   const handleCancelButtonClick = () => {
     resetView();
     pubSub.publish('parcel/highlightNone');
   };
 
-  const handleNotifyButtonClick = () => {
-    // TODO: Send notification about selected parcels to backend
-    // Send a notification about selected parcel and clear search results
+  const handleNotifyButtonClick = event => {
+    event.preventDefault(); // Prevent the browser from refreshing
+    showAlert();
     resetView();
   };
 
@@ -108,6 +115,10 @@ const Notification = () => {
         surroundingParcels={distanceSearchStore.searchResults}
         pubSub={pubSub}
       />
+
+      {isAlertVisible && (
+        <NotificationAlert onClose={hideAlert}/>
+      )}
 
       <Card className={styles.card} style={cardStyle}>
         <CardBody id={CARD_BODY_ID}>

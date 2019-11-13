@@ -4,7 +4,6 @@ import {
   ActionGroup,
   Button,
   ButtonVariant,
-  Form,
 } from '@patternfly/react-core';
 import { Spinner } from '@patternfly/react-core/dist/js/experimental';
 import ErrorMessage from 'components/ErrorMessage';
@@ -56,8 +55,8 @@ const DistanceSearch = ({ store }) => {
  * @param {Object} props
  * @param {function(): void} props.onCancelButtonClick - Callback that gets called when the user
  *     clicks the cancel button
- * @param {function(): void} props.onNotifyButtonClick - Callback that receives the edited
- *     parcel when the user clicks the "Notify" button
+ * @param {function(): void} props.onNotifyButtonClick - Callback that gets called when the user
+ *     clicks the notify button
  * @param {Store} props.distanceSearchStore
  */
 const NotificationForm = props => {
@@ -67,36 +66,23 @@ const NotificationForm = props => {
     distanceSearchStore,
   } = props;
 
-  /** <form> onSubmit handler */
-  const handleFormSubmit = event => {
-    event.preventDefault(); // Prevent the browser from refreshing
-    onNotifyButtonClick();
-  };
-
-  /** "Notify" button's onClick handler */
-  const handleNotifyButtonClick = () => {
-    onNotifyButtonClick();
-  };
-
   return (
     <div>
       <DistanceSearch store={distanceSearchStore} />
-      <Form onSubmit={handleFormSubmit}>
-        <ActionGroup className={styles.actionGroup}>
-          <Button
-            variant={ButtonVariant.secondary}
-            onClick={onCancelButtonClick}
-          >
-            Cancel
-          </Button>
-          <Button
-            variant={ButtonVariant.primary}
-            onClick={handleNotifyButtonClick}
-          >
-            Notify
-          </Button>
-        </ActionGroup>
-      </Form>
+      <ActionGroup className={styles.actionGroup}>
+        <Button
+          variant={ButtonVariant.secondary}
+          onClick={onCancelButtonClick}
+        >
+          Cancel
+        </Button>
+        <Button
+          variant={ButtonVariant.primary}
+          onClick={onNotifyButtonClick}
+        >
+          Notify
+        </Button>
+      </ActionGroup>
     </div>
   );
 };
