@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { Page } from '@patternfly/react-core';
 import Header from 'components/Header';
 import WelcomeView from 'views/Welcome';
-import CategoriesView from 'views/Categories';
-import NotifierView from 'views/Notifier';
+import ClassificationView from 'views/Classification';
+import NotificationView from 'views/Notification';
 
 /**
  * Returns the rendered view component for the given view ID
@@ -14,11 +14,11 @@ const renderViewById = currentViewId => {
     case 'welcome':
       return <WelcomeView />;
 
-    case 'categories':
-      return <CategoriesView />;
+    case 'classification':
+      return <ClassificationView />;
 
-    case 'notifier':
-      return <NotifierView />;
+    case 'notification':
+      return <NotificationView />;
 
     default:
       return `Error: No view found for id: '${currentViewId}'`;

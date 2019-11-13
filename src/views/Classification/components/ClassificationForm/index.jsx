@@ -20,7 +20,7 @@ import styles from './index.module.scss';
  *     parcel when the user clicks the "save" button
  * @param {number | string} props.parcelId
 */
-const EditForm = props => {
+const ClassificationForm = props => {
   const {
     onCancelButtonClick,
     onSaveButtonClick,
@@ -76,4 +76,4 @@ const EditForm = props => {
   );
 };
 
-export default EditForm;
+export default ClassificationForm;
