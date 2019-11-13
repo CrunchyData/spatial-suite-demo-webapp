@@ -52,12 +52,22 @@ const SearchResultsList = ({ parcelSearchResults }) => {
       <TextContent>
         <Text>{rows.length} parcels found</Text>
       </TextContent>
-      <Table className={styles.root} cells={columns} rows={rows}>
+      <Table
+        aria-label="Surrounding parcels"
+        className={styles.root}
+        cells={columns}
+        rows={rows}
+      >
         <TableHeader />
-        <TableBody />
+        <TableBody rowKey={rowKey} />
       </Table>
     </>
   );
 };
+
+/** Generates a row key for the <TableBody> component */
+function rowKey({ rowData }) {
+  return rowData.id.title;
+}
 
 export default memo(SearchResultsList);
