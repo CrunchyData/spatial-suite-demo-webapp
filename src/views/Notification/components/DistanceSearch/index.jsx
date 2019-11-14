@@ -7,6 +7,7 @@ import {
 import { Spinner } from '@patternfly/react-core/dist/js/experimental';
 import ErrorMessage from 'components/ErrorMessage';
 import SearchResultsList from './components/SearchResultsList';
+import styles from '../../index.module.css';
 
 /** @typedef {ReturnType<typeof import('../useDistanceSearchStore')['default']>} Store */
 
@@ -41,6 +42,7 @@ const DistanceSearch = ({ store }) => {
   return (
     <>
       <FormGroup
+        className={styles.formGroup}
         fieldId="distance-search"
         label="Search parcels within a distance of how many meters?"
       >

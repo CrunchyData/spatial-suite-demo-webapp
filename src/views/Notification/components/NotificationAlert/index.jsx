@@ -13,7 +13,7 @@ const NotificationAlert = props => {
     <Alert
       className={styles.root}
       variant="success"
-      title="Success alert title"
+      title="Successfully Notified"
       action={<AlertActionCloseButton onClose={onClose} />}
     >
       Homeowners have been notified!
