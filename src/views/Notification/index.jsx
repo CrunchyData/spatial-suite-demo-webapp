@@ -17,6 +17,7 @@ import {
 import AddressSearch from 'components/AddressSearch';
 import ParcelMap from 'components/ParcelMap';
 import useAddressSearchStore from 'components/AddressSearch/useAddressSearchStore';
+import FormHeading from 'components/FormHeading';
 import useViewCardStyles from 'hooks/useViewCardStyles';
 import usePubSub from 'hooks/usePubSub';
 import useDistanceSearchStore from './components/useDistanceSearchStore';
@@ -49,10 +50,10 @@ const ParcelDetails = ({ parcelFromMap }) => {
   const { apn, id, isFireHazard } = parcelFromMap;
 
   return (
-    <TextContent>
-      <Text>ID: {id}</Text>
-      <Text>APN: {apn}</Text>
-      <Text>Fire hazard: {isFireHazard ? 'Yes' : 'No'}</Text>
+    <TextContent className={styles.parcelDetails}>
+      <Text><strong>ID:</strong> {id}</Text>
+      <Text><strong>APN:</strong> {apn}</Text>
+      <Text><strong>Fire hazard:</strong> {isFireHazard ? 'Yes' : 'No'}</Text>
     </TextContent>
   );
 };
@@ -174,6 +175,7 @@ const Notification = () => {
 
       <Card className={styles.card} style={cardStyle}>
         <CardBody id={CARD_BODY_ID}>
+          <FormHeading>Active Fire Notification</FormHeading>
           {
             // If there is a parcel selected, show the parcel details.
             // Otherwise, show the address search form.
@@ -187,7 +189,7 @@ const Notification = () => {
               /** Distance search form */
               <Form onSubmit={distanceSearchStore.handleFormSubmit}>
                 <DistanceSearch store={distanceSearchStore} />
-                <ActionGroup>
+                <ActionGroup className={styles.actionGroup}>
                   <CancelButton onClick={handleCancelButtonClick} />
                   {
                     distanceSearchStore.searchResults.length

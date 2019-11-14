@@ -1,7 +1,7 @@
 .pageSection {
   height: 100%;
   width: 100%;
-  padding: 0;
+  padding: 0 !important;
   position: relative;
 }
 
@@ -9,9 +9,26 @@
   position: absolute;
   left: 0;
   top: 0;
-  box-shadow: 6px 6px 20px 0px rgba(0,0,0,0.5);
-  height: 9rem;
+  box-shadow: 6px 6px 20px 0px rgba(0,0,0,0.5) !important;
   width: 31.75rem;
   transition: height 0.3s ease-in-out;
   overflow: hidden;
+}
+
+.parcelDetails p:not(:last-child) {
+  margin-bottom: 0 !important;
+}
+
+.formGroup label {
+  border-top: 1px solid gray;
+  font-size: var(--pf-global--FontWeight--normal);
+  line-height: var(--pf-global--LineHeight--md);
+  margin-top: 0.75rem;
+  margin-bottom: 0.35rem;
+  padding-top: 0.75rem;
+  width: 100%;
+}
+
+.actionGroup {
+  margin-top: 0 !important;
 }
